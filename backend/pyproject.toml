@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=75.3.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "competitor-insights-assistant"
+version = "0.1.0"
+description = "AI-powered business profile comparison tool"
+readme = "README.md"
+requires-python = ">=3.12"
+keywords = ["django", "vue", "ai", "competitor", "insights"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "Django==5.2.1",
+    "djangorestframework==3.16.0",
+    "django-cors-headers==4.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=25.1",
+    "isort>=6.0",
+    "flake8>=7.2",
+    "pre-commit>=4.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/QianqianQ/competitor-insights-assistant"
+Source = "https://github.com/QianqianQ/competitor-insights-assistant"
+Issues = "https://github.com/QianqianQ/competitor-insights-assistant/issues"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]

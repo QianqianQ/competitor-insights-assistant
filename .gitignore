@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.env
+venv/
+
+# Node
+node_modules/
+dist/
+npm-debug.log*
+
+# Docker
+.env
+*.swp
+*.swo
+
+# db
+db.sqlite3
+
+# IDE
+.vscode/
+.idea/
+.cursor/
