@@ -35,7 +35,7 @@ const toggleMobileMenu = () => {
             >
               Home
             </router-link>
-            <!-- <router-link
+            <router-link
               to="/comparison"
               class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 border-transparent hover:border-primary-500 transition-all duration-300"
               active-class="border-primary-500 text-primary-600"
@@ -47,8 +47,8 @@ const toggleMobileMenu = () => {
               class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 border-transparent hover:border-primary-500 transition-all duration-300"
               active-class="border-primary-500 text-primary-600"
             >
-              Reports
-            </router-link> -->
+              Report
+            </router-link>
           </nav>
         </div>
 
@@ -88,7 +88,7 @@ const toggleMobileMenu = () => {
           class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 cursor-pointer"
           :class="{ 'bg-primary-50 text-primary-600': $route.path === '/report' }"
         >
-          Reports
+          Report
         </a>
       </div>
     </div>

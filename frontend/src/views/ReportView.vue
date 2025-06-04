@@ -1,81 +1,255 @@
 <template>
-  <div class="results-view" v-if="store.report">
-    <header class="results-header">
-      <h1>Comparison Report</h1>
-      <p>Insightful analysis of {{ store.report.user_business.name }} against its competitors.</p>
-      <button @click="goBack" class="back-button">New Comparison</button>
-    </header>
-
-    <div v-if="store.isLoading" class="loading-section">
-      <LoadingSpinner message="Loading report..." />
-    </div>
-    <div v-else-if="store.error" class="error-section">
-      <ErrorMessage :message="store.error" />
-    </div>
-
-    <div v-else-if="store.report" class="report-content">
-      <!-- User Business Profile -->
-      <section class="business-section user-business-section">
-        <h2>Your Business (Rank: {{ store.report.user_business.rank || 'N/A' }})</h2>
-        <BusinessProfileCard :business="store.report.user_business" :is-user-business="true" />
-      </section>
-
-      <!-- AI Summary -->
-      <section class="ai-summary-section card-style">
-        <h2>AI-Powered Summary</h2>
-        <p>{{ store.report.ai_comparison_summary }}</p>
-      </section>
-
-      <!-- AI Suggestions -->
-      <section class="ai-suggestions-section card-style">
-        <h2>Improvement Suggestions</h2>
-        <ul>
-          <li v-for="(suggestion, index) in store.report.ai_improvement_suggestions" :key="index">
-            {{ suggestion }}
-          </li>
-        </ul>
-      </section>
-
-      <!-- Visual Comparison Charts -->
-      <!-- <section class="charts-section card-style">
-        <h2>Visual Comparison</h2>
-        <div class="charts-grid">
-          <ComparisonChart
-            title="Average Customer Rating"
-            :user-value="store.report.user_business.rating || 0"
-            :user-label="store.report.user_business.name"
-            :competitor-values="[]"
-            :competitor-labels="[]"
-            data-suffix=" / 5"
-            :max-value="5"
-           />
-          <ComparisonChart
-            title="Number of Reviews"
-            :user-value="store.report.user_business.rating_count || 0"
-            :user-label="store.report.user_business.name"
-            :competitor-values="[]"
-            :competitor-labels="[]"
-          />
-          <ComparisonChart
-            title="Profile Completeness Score"
-            :user-value="store.report.user_business.profile_score || 0"
-            :user-label="store.report.user_business.name"
-            :competitor-values="[]"
-            :competitor-labels="[]"
-            data-suffix=" / 1.0"
-            :max-value="1"
-           />
+  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header Section -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600">
+          Business Comparison Report
+        </h1>
+        <p v-if="store.report" class="text-lg text-gray-600 mb-6">
+          Comprehensive analysis of <span class="font-semibold text-primary-700">{{ store.report.user_business.name }}</span> against competitors
+        </p>
+        <div class="flex justify-center space-x-4">
+          <button @click="goBack" class="btn btn-secondary flex items-center">
+            <i class="pi pi-arrow-left mr-2"></i>
+            New Comparison
+          </button>
+          <button @click="goToComparison" class="btn btn-primary flex items-center">
+            <i class="pi pi-chart-bar mr-2"></i>
+            View Comparison
+          </button>
         </div>
-      </section> -->
+      </div>
 
-       <footer class="report-footer">
-        <p>Report generated on: {{ new Date(store.report.created_at || Date.now()).toLocaleDateString() }}</p>
-        <p v-if="store.report.metadata">LLM Provider: {{ store.report.metadata.llm_provider || 'N/A' }}, Model: {{ store.report.metadata.llm_model || 'N/A' }}</p>
-      </footer>
-    </div>
+      <!-- Loading State -->
+      <div v-if="store.isLoading" class="flex items-center justify-center min-h-[400px]">
+        <LoadingSpinner message="Generating report..." />
+      </div>
 
-    <div v-else class="no-report-message">
-        <p>No comparison report available. Please start a new comparison.</p>
+      <!-- Error State -->
+      <div v-else-if="store.error" class="flex items-center justify-center min-h-[400px]">
+        <ErrorMessage :message="store.error" />
+      </div>
+
+      <!-- No Report State -->
+      <div v-else-if="!store.report" class="flex flex-col items-center justify-center min-h-[400px]">
+        <div class="text-center">
+          <i class="pi pi-file-excel text-6xl text-gray-400 mb-4"></i>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-2">No Report Available</h2>
+          <p class="text-gray-600 mb-6">Start a new comparison to generate your business report.</p>
+          <button @click="goBack" class="btn btn-primary">
+            Start New Comparison
+          </button>
+        </div>
+      </div>
+
+      <!-- Report Content -->
+      <div v-else class="space-y-8 animate-fade-in">
+        <!-- Quick Stats Overview -->
+        <div class="card">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="pi pi-chart-line text-primary-600 mr-3"></i>
+            Performance Overview
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="text-center p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
+              <div class="text-3xl font-bold text-primary-700 mb-1">
+                #{{ store.report.user_business.rank || 'N/A' }}
+              </div>
+              <div class="text-sm text-primary-600 font-medium">Market Rank</div>
+            </div>
+            <div class="text-center p-4 bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl">
+              <div class="text-3xl font-bold text-secondary-700 mb-1">
+                {{ store.report.user_business.rating?.toFixed(1) || 'N/A' }}
+              </div>
+              <div class="text-sm text-secondary-600 font-medium">Average Rating</div>
+            </div>
+            <div class="text-center p-4 bg-gradient-to-br from-success-50 to-success-100 rounded-xl">
+              <div class="text-3xl font-bold text-success-700 mb-1">
+                {{ store.report.user_business.rating_count || 0 }}
+              </div>
+              <div class="text-sm text-success-600 font-medium">Total Reviews</div>
+            </div>
+            <div class="text-center p-4 bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl">
+              <div class="text-3xl font-bold text-accent-700 mb-1">
+                {{ Math.round((store.report.user_business.profile_score || 0) * 100) }}%
+              </div>
+              <div class="text-sm text-accent-600 font-medium">Profile Score</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Your Business Profile -->
+        <div class="card">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="pi pi-building text-primary-600 mr-3"></i>
+            Your Business Profile
+          </h2>
+          <div class="bg-gradient-to-r from-primary-50 to-secondary-50 p-6 rounded-xl">
+            <BusinessProfileCard :business="store.report.user_business" :is-user-business="true" />
+          </div>
+        </div>
+
+        <!-- AI-Powered Summary -->
+        <div class="card">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="pi pi-lightbulb text-warning-500 mr-3"></i>
+            AI-Powered Analysis
+          </h2>
+
+          <div v-if="parsedAnalysis" class="space-y-6">
+            <!-- Overview Section -->
+            <div v-if="parsedAnalysis.overview" class="bg-gradient-to-r from-primary-50 to-secondary-50 p-6 rounded-xl border-l-4 border-primary-400">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="pi pi-info-circle text-primary-600 mr-2"></i>
+                Market Overview
+              </h3>
+              <p class="text-gray-700 leading-relaxed">{{ parsedAnalysis.overview }}</p>
+            </div>
+
+            <!-- Strengths Section -->
+            <div v-if="parsedAnalysis.strengths?.length" class="bg-gradient-to-r from-success-50 to-primary-50 p-6 rounded-xl border-l-4 border-success-400">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="pi pi-check-circle text-success-600 mr-2"></i>
+                Your Strengths
+              </h3>
+              <ul class="space-y-2">
+                <li v-for="(strength, index) in parsedAnalysis.strengths" :key="index" class="flex items-start">
+                  <i class="pi pi-plus text-success-600 mr-3 mt-1 text-sm"></i>
+                  <span class="text-gray-700">{{ strength }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Weaknesses Section -->
+            <div v-if="parsedAnalysis.weaknesses?.length" class="bg-gradient-to-r from-warning-50 to-accent-50 p-6 rounded-xl border-l-4 border-warning-400">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="pi pi-exclamation-triangle text-warning-600 mr-2"></i>
+                Areas for Improvement
+              </h3>
+              <ul class="space-y-2">
+                <li v-for="(weakness, index) in parsedAnalysis.weaknesses" :key="index" class="flex items-start">
+                  <i class="pi pi-minus text-warning-600 mr-3 mt-1 text-sm"></i>
+                  <span class="text-gray-700">{{ weakness }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Competitive Position Section -->
+            <div v-if="parsedAnalysis.competitive_position" class="bg-gradient-to-r from-secondary-50 to-accent-50 p-6 rounded-xl border-l-4 border-secondary-400">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="pi pi-chart-bar text-secondary-600 mr-2"></i>
+                Competitive Position
+              </h3>
+              <p class="text-gray-700 leading-relaxed">{{ parsedAnalysis.competitive_position }}</p>
+            </div>
+          </div>
+
+          <!-- Fallback for plain text analysis -->
+          <div v-else class="bg-gradient-to-r from-warning-50 to-accent-50 p-6 rounded-xl border-l-4 border-warning-400">
+            <div class="prose prose-lg max-w-none">
+              <p class="text-gray-700 leading-relaxed text-lg">
+                {{ store.report.ai_comparison_summary }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Improvement Suggestions -->
+        <div class="card">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="pi pi-thumbs-up text-success-600 mr-3"></i>
+            Actionable Recommendations
+          </h2>
+          <div class="space-y-4">
+            <div
+              v-for="(suggestion, index) in store.report.ai_improvement_suggestions"
+              :key="index"
+              class="group relative overflow-hidden"
+            >
+              <div class="flex items-start p-6 bg-gradient-to-r from-success-50 to-primary-50 rounded-xl border border-success-200 hover:shadow-md transition-all duration-300">
+                <div class="flex-shrink-0 mr-4">
+                  <div class="w-8 h-8 bg-success-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                    {{ index + 1 }}
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-800 leading-relaxed">{{ suggestion }}</p>
+                </div>
+                <div class="flex-shrink-0 ml-4">
+                  <i class="pi pi-arrow-right text-success-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitors Preview -->
+        <div v-if="store.report.competitor_businesses?.length > 0" class="card">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="pi pi-users text-secondary-600 mr-3"></i>
+            Competitor Overview
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              v-for="competitor in store.report.competitor_businesses.slice(0, 3)"
+              :key="competitor.identifier_used || competitor.name"
+              class="bg-gradient-to-br from-gray-50 to-secondary-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300"
+            >
+              <div class="text-center">
+                <h3 class="font-semibold text-gray-800 mb-2">{{ competitor.name }}</h3>
+                <div class="flex justify-center space-x-4 text-sm text-gray-600">
+                  <div>
+                    <span class="font-medium">{{ competitor.rating?.toFixed(1) || 'N/A' }}</span>
+                    <i class="pi pi-star-fill text-yellow-400 ml-1"></i>
+                  </div>
+                  <div>
+                    <span class="font-medium">{{ competitor.rating_count || 0 }}</span>
+                    <span class="text-xs ml-1">reviews</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 text-center">
+            <button @click="goToComparison" class="btn btn-secondary">
+              View Detailed Comparison
+            </button>
+          </div>
+        </div>
+
+        <!-- Report Metadata -->
+        <div class="card bg-gradient-to-r from-gray-50 to-primary-50">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="mb-4 md:mb-0">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">Report Information</h3>
+              <p class="text-gray-600">
+                Generated on {{ new Date(store.report.created_at || Date.now()).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }) }}
+              </p>
+              <p v-if="store.report.metadata" class="text-sm text-gray-500 mt-1">
+                Powered by {{ store.report.metadata.llm_provider || 'AI' }}
+                <span v-if="store.report.metadata.llm_model">({{ store.report.metadata.llm_model }})</span>
+              </p>
+            </div>
+            <div class="flex space-x-3">
+              <button @click="goToComparison" class="btn btn-secondary flex items-center">
+                <i class="pi pi-chart-bar mr-2"></i>
+                View Comparison
+              </button>
+              <button @click="goBack" class="btn btn-primary flex items-center">
+                <i class="pi pi-plus mr-2"></i>
+                New Analysis
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -91,122 +265,31 @@ import ErrorMessage from '@/components/ErrorMessage.vue';
 const store = useComparisonStore();
 const router = useRouter();
 
+// Parse the AI analysis JSON if it's structured
+const parsedAnalysis = computed(() => {
+  if (!store.report?.ai_comparison_summary) return null;
+
+  try {
+    // Try to parse as JSON
+    const parsed = JSON.parse(store.report.ai_comparison_summary);
+
+    // Validate that it has the expected structure
+    if (typeof parsed === 'object' && parsed !== null) {
+      return parsed;
+    }
+    return null;
+  } catch (error) {
+    // If parsing fails, return null to fall back to plain text
+    return null;
+  }
+});
+
 function goBack() {
   store.clearReport();
   router.push({ name: 'home' });
 }
 
-// Ensure report is available, otherwise redirect (though router guard should handle this)
-if (!store.report) {
-  // router.push({ name: 'Input' }); // Can be redundant due to route guard
+function goToComparison() {
+  router.push({ name: 'comparison' });
 }
 </script>
-
-<style scoped>
-.results-view {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.results-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.results-header h1 {
-  font-size: 2.5em;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.results-header p {
-  font-size: 1.1em;
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.back-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.back-button:hover {
-  background-color: #0056b3;
-}
-
-.report-content {
-  display: grid;
-  gap: 30px;
-}
-
-.business-section h2,
-.ai-summary-section h2,
-.ai-suggestions-section h2,
-.charts-section h2 {
-  font-size: 1.8em;
-  color: #444;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #007bff;
-}
-
-.card-style {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-}
-
-.user-business-section .card-style {
-  border-left: 5px solid #007bff; /* Accent for user's business */
-}
-
-.ai-suggestions-section ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.ai-suggestions-section li {
-  background-color: #e9f5ff;
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border-left: 4px solid #007bff;
-  color: #333;
-  font-size: 1em;
-}
-
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
-}
-
-.loading-section, .error-section, .no-report-message {
-  text-align: center;
-  padding: 50px 20px;
-}
-.no-report-message p {
-    font-size: 1.2em;
-    color: #777;
-}
-
-.report-footer {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 0.9em;
-  color: #888;
-  padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
-}
-</style>

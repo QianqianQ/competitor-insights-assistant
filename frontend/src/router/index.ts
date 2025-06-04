@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ReportView from '../views/ReportView.vue'
+import ComparisonView from '../views/ComparisonView.vue'
 import { useComparisonStore } from '@/stores/comparisonStore'
 
 const router = createRouter({
@@ -10,6 +11,21 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/comparison',
+      name: 'comparison',
+      component: ComparisonView,
+      beforeEnter: (to: any, from: any, next: any) => {
+        // Guard to ensure comparison page is only accessible if a report exists
+        const store = useComparisonStore();
+        if (store.hasReport) {
+          next();
+        } else {
+          // If no report, redirect to home page
+          next({ name: 'home' });
+        }
+      },
     },
     {
       path: '/report',

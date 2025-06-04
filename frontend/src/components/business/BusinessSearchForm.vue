@@ -50,16 +50,11 @@ async function submitComparisonRequest() {
 
   await store.fetchComparisonReport({ user_business_identifier: userBusinessIdentifier.value });
   if (store.report && !store.error) {
-    router.push({ name: 'report' });
+    // Navigate to comparison view to show detailed comparison first
+    router.push({ name: 'comparison' });
   }
 }
 
-// Clear previous report/error when component is mounted
-onMounted(() => {
-  if(router.currentRoute.value.name !== 'report') {
-    store.clearReport();
-  }
-});
 </script>
 
 <template>
