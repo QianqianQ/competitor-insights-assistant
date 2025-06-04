@@ -48,4 +48,5 @@ export interface ComparisonState {
   error: string | null;
   report: ComparisonReportData | null;
   userInput: string; // To store the user_business_identifier input
+  isNavigating: boolean; // To track navigation state
 }

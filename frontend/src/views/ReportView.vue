@@ -32,7 +32,7 @@
       </div>
 
       <!-- No Report State -->
-      <div v-else-if="!store.report" class="flex flex-col items-center justify-center min-h-[400px]">
+      <div v-else-if="!store.report && !store.isNavigating" class="flex flex-col items-center justify-center min-h-[400px]">
         <div class="text-center">
           <i class="pi pi-file-excel text-6xl text-gray-400 mb-4"></i>
           <h2 class="text-2xl font-semibold text-gray-800 mb-2">No Report Available</h2>
@@ -309,8 +309,11 @@ const topCompetitors = computed(() => {
 });
 
 function goBack() {
-  store.clearReport();
-  router.push({ name: 'home' });
+  store.isNavigating = true;
+  router.push({ name: 'home' }).then(() => {
+    store.clearReport();
+    store.isNavigating = false;
+  });
 }
 
 function goToComparison() {

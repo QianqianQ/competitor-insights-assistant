@@ -9,6 +9,7 @@ export const useComparisonStore = defineStore('comparison', {
     error: null,
     report: null,
     userInput: '',
+    isNavigating: false,
   }),
   actions: {
     async fetchComparisonReport(payload: ComparisonRequestPayload) {
@@ -40,7 +41,7 @@ export const useComparisonStore = defineStore('comparison', {
         this.report = {
           ...data,
           user_business: processedUserBusiness, // User business with its score
-          competitors_businesses: processedCompetitors, // Still store processed competitors, even if not displayed in detail
+          competitor_businesses: processedCompetitors, // Still store processed competitors, even if not displayed in detail
                                              // This allows AI summary/suggestions to use them if backend sends them
                                              // and facilitates re-adding display later.
         };
@@ -127,6 +128,7 @@ export const useComparisonStore = defineStore('comparison', {
       this.report = null;
       this.error = null;
       this.userInput = '';
+      this.isNavigating = false;
     }
   },
   getters: {

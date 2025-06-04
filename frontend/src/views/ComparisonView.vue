@@ -133,8 +133,11 @@ const viewDetailedReport = () => {
 }
 
 const startNewComparison = () => {
-  store.clearReport()
-  router.push({ name: 'home' })
+  store.isNavigating = true;
+  router.push({ name: 'home' }).then(() => {
+    store.clearReport()
+    store.isNavigating = false;
+  })
 }
 
 onMounted(() => {
@@ -158,7 +161,7 @@ onMounted(() => {
     </div>
 
     <!-- No Report State -->
-    <div v-else-if="!hasReport" class="flex flex-col items-center justify-center min-h-[400px]">
+    <div v-else-if="!hasReport && !store.isNavigating" class="flex flex-col items-center justify-center min-h-[400px]">
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-4">No Comparison Data Available</h1>
         <p class="text-gray-600 mb-8">Start a new comparison to see detailed insights about your business.</p>
