@@ -53,21 +53,20 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
 class ComparisonReportSerializer(serializers.ModelSerializer):
     """Serializer for comparison report responses."""
 
-    user_business = BusinessProfileSerializer(read_only=True)
-    competitor_businesses = BusinessProfileSerializer(many=True, read_only=True)
+    # user_business = BusinessProfileSerializer(read_only=True)
+    # competitor_businesses = BusinessProfileSerializer(many=True, read_only=True)
+    user_business = serializers.DictField()  # Explicitly declare JSONField as Dict
+    # competitor_businesses = serializers.ListField()
     competitor_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = ComparisonReport
         fields = [
-            "id",
-            "report_id",
             "user_business",
-            "competitor_businesses",
+            # "competitor_businesses",
             "competitor_count",
             "ai_comparison_summary",
             "ai_improvement_suggestions",
-            "created_at",
-            "updated_at",
+            "metadata",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]

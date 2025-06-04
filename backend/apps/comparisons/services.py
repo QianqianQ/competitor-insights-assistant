@@ -8,6 +8,7 @@ and generating AI-powered insights and recommendations.
 import asyncio
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
+from config.settings.base import PERPELEXITY_AI_API_KEY
 
 from apps.businesses.models import BusinessProfileData
 from apps.common.exceptions import BusinessDataError, ValidationError
@@ -47,7 +48,7 @@ class ComparisonService:
             api_key="mock-key",  # Will be replaced with real key
         )
         self.llm_provider = OpenAIProvider(
-            api_key="mock-key"  # Will be replaced with real key
+            api_key=PERPELEXITY_AI_API_KEY
         )
 
     def create_comparison(
@@ -94,33 +95,22 @@ class ComparisonService:
             )
 
             # Single LLM call for both analysis and suggestions
-
-            if self.data_provider.use_mock:
-                llm_response = (
-                    self.llm_provider.generate_comparison_analysis_from_mock_data(
-                        user_business_data=comparison_data["user_business"],
-                        competitor_data=comparison_data["competitors"]
-                    )
-                )
-            else:
-                llm_response = (
-                    self.llm_provider.generate_comparison_analysis(
-                        user_business_data=comparison_data["user_business"],
-                        competitor_data=comparison_data["competitors"]
-                    )
-                )
+            llm_response = asyncio.run(self.llm_provider.generate_comparison_analysis(
+                user_business_data=comparison_data["user_business"],
+                competitor_data=comparison_data["competitors"],
+            ))
 
             # Create and save comparison report
             report = ComparisonReport(
-                user_business=user_business,
-                competitor_businesses=competitor_businesses,
+                user_business=user_business.to_dict(),
+                competitor_businesses=[c.to_dict() for c in competitor_businesses],
                 ai_comparison_summary=llm_response.content,
                 ai_improvement_suggestions=llm_response.suggestions,
-                comparison_data={
+                metadata={
                     "llm_provider": llm_response.provider,
                     "llm_model": llm_response.model,
                     "tokens_used": llm_response.tokens_used,
-                    "comparison_data": comparison_data,
+                    # "comparison_data": comparison_data,
                 },
             )
 

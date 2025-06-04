@@ -54,7 +54,7 @@ class ComparisonViewSet(viewsets.ModelViewSet):
         """Return appropriate serializer based on action."""
         if self.action == "create":
             return ComparisonRequestSerializer
-        # return ComparisonReportSerializer
+        return ComparisonReportSerializer
 
     def create(self, request: Request) -> Response:
         """
@@ -87,19 +87,17 @@ class ComparisonViewSet(viewsets.ModelViewSet):
 
             logger.info(
                 "comparison_creation_completed",
-                report_id=str(report.id),
-                user_business_id=report.user_business,
+                user_business=report.user_business,
                 analysis_length=len(report.ai_comparison_summary),
                 suggestions_count=len(report.ai_improvement_suggestions),
             )
 
             # Serialize response
-            # response_serializer = ComparisonReportSerializer(report)
-            # return Response(
-            #     response_serializer.data,
-            #     status=status.HTTP_201_CREATED
-            # )
-            return Response(report.get_summary_data(), status=status.HTTP_201_CREATED)
+            response_serializer = ComparisonReportSerializer(report)
+            return Response(
+                response_serializer.data,
+                status=status.HTTP_201_CREATED
+            )
         except Exception as e:
             logger.exception(
                 "comparison_unexpected_error", error=str(e), error_type=type(e).__name__

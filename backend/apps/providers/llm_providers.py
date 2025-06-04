@@ -5,7 +5,7 @@ This module implements the Provider Pattern for LLM services,
 allowing easy switching between OpenAI, local models (Ollama), etc.
 """
 
-import os
+import json
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -32,68 +32,17 @@ class LLMResponse:
 class OpenAIProvider:
     """OpenAI API implementation using modern async patterns."""
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4o-mini"):
-        self.api_key = api_key or os.environ.get("OPENAI_API_KEY", "mock-key")
+    def __init__(self, api_key: Optional[str] = None, model: str = "sonar"):
+        self.api_key = api_key
         self.model = model
-        self.provider_name = "openai"
+        self.provider_name = "perplexity"
 
         # Initialize async client with proper configuration
-        self.client = AsyncOpenAI(api_key=self.api_key, max_retries=3, timeout=30.0)
-
- #########################################################
-    # Mock data methods
-    #########################################################
-
-    def generate_comparison_analysis_from_mock_data(
-        self,
-        user_business_data: Dict[str, Any],
-        competitor_data: List[Dict[str, Any]],
-        **kwargs
-    ) -> LLMResponse:
-        return self._mock_json_comparison_response(
-            user_business_data,
-            competitor_data
-        )
-
-    def _mock_json_comparison_response(
-        self,
-        user_business_data: Dict[str, Any],
-        competitor_data: List[Dict[str, Any]]
-    ) -> LLMResponse:
-        """Generate mock JSON response for development."""
-        import json
-
-        user_name = user_business_data.get("name", "Your Business")
-        competitor_count = len(competitor_data)
-
-        mock_response = {
-            "analysis": {
-                "overview": f"{user_name} competes with {competitor_count} similar businesses in the area",
-                "strengths": [
-                    "Strong customer review ratings",
-                    "Complete business profile information"
-                ],
-                "weaknesses": [
-                    "Fewer reviews than competitors",
-                    "Limited business photos"
-                ],
-                "competitive_position": "Middle-tier competitive position with room for improvement"
-            },
-            "suggestions": [
-                "1. Implement a review generation strategy",
-                "2. Add more high-quality photos of your business",
-                "3. Update business hours information",
-                "4. Respond to customer reviews promptly"
-            ]
-        }
-
-        return LLMResponse(
-            content=json.dumps(mock_response["analysis"]),
-            suggestions=mock_response["suggestions"],
-            tokens_used=350,
-            model=self.model,
-            provider=self.provider_name,
-            metadata={"mock": True, "format": "json"}
+        self.client = AsyncOpenAI(
+            api_key=self.api_key,
+            max_retries=3,
+            timeout=30.0,
+            base_url="https://api.perplexity.ai",
         )
 
     async def generate_comparison_analysis(
@@ -110,6 +59,43 @@ class OpenAIProvider:
                 user_business_data, competitor_data
             )
 
+            response_format = {
+                "type": "json_schema",
+                "json_schema": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "analysis": {
+                                "type": "object",
+                                "properties": {
+                                    "overview": {"type": "string"},
+                                    "strengths": {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    },
+                                    "weaknesses": {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    },
+                                    "competitive_position": {"type": "string"}
+                                },
+                                "required": [
+                                    "overview",
+                                    "strengths",
+                                    "weaknesses",
+                                    "competitive_position"
+                                ]
+                            },
+                            "suggestions": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            }
+                        },
+                        "required": ["analysis", "suggestions"]
+                    }
+                }
+            }
+
             response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=[
@@ -117,16 +103,14 @@ class OpenAIProvider:
                     {"role": "user", "content": user_prompt},
                 ],
                 temperature=0.7,
-                response_format={"type": "json_object"},
-                max_tokens=100,
+                response_format=response_format,
+                max_tokens=300,
             )
 
             content = response.choices[0].message.content
             tokens_used = response.usage.total_tokens
 
             # Parse JSON response
-            import json
-
             try:
                 result = json.loads(content)
                 suggestions = result.get("suggestions", [])
@@ -149,7 +133,8 @@ class OpenAIProvider:
                     "invalid_json_response", error=str(e), content=content[:100]
                 )
                 # Fallback to text parsing
-                suggestions = self._parse_suggestions(content)
+                suggestions = self._generate_fallback_recommendations(
+                    user_business_data, competitor_data)
                 return LLMResponse(
                     content=content,
                     suggestions=suggestions,
@@ -189,7 +174,8 @@ class OpenAIProvider:
         }
 
         Requirements:
-        - Respond ONLY with valid JSON
+        - Respond ONLY with valid JSON.
+        Ensure the output is valid JSON with all strings terminated and objects closed.
         - Include exactly 3-5 suggestions
         - Keep analysis data-driven and specific
         - Do not include any text outside the JSON structure
@@ -199,108 +185,25 @@ class OpenAIProvider:
         self, user_business_data: Dict[str, Any], competitor_data: List[Dict[str, Any]]
     ) -> str:
         """Build prompt for JSON-formatted analysis."""
-        user_name = user_business_data.get("name", "Your Business")
-        competitor_count = len(competitor_data)
-
-        # Build competitor summary
-        competitor_summary = []
-        for comp in competitor_data:
-            comp_name = comp.get("name", "Unknown")
-            comp_reviews = comp.get("rating_count", 0)
-            comp_rating = comp.get("rating", 0)
-            competitor_summary.append(
-                f"- {comp_name}: {comp_reviews} reviews, "
-                f"{comp_rating:.1f}/5.0 rating"
-            )
-
-        user_stats = (
-            f"Reviews: {user_business_data.get('rating_count', 0)}, "
-            f"Rating: {user_business_data.get('rating', 0):.1f}/5.0, "
-            f"Images: {user_business_data.get('image_count', 0)}"
-        )
 
         prompt = f"""
-Analyze this competitive data and return JSON with:
-1. Analysis of competitive landscape
-2. Key strengths/weaknesses
-3. Competitive position assessment
-4. 3-5 specific suggestions
+        Analyze this competitive data and return JSON with:
+        1. Analysis of competitive landscape
+        2. Key strengths/weaknesses
+        3. Competitive position assessment
+        4. 3-5 specific suggestions
 
-Data:
-- Your Business: {user_stats}
-- Competitors: {chr(10).join(competitor_summary)}
+        Data:
+        - Your Business: {user_business_data}
+        - Competitors: {competitor_data}
 
-Respond ONLY with valid JSON matching the specified format.
-Do not include any explanatory text outside the JSON.
-""".strip()
-
-        return prompt
-
-    def _build_suggestions_prompt(self, comparison_data: Dict[str, Any]) -> str:
-        """Build prompt for generating suggestions."""
-        user_data = comparison_data.get("user_business", {})
-        competitors = comparison_data.get("competitors", [])
-        avg_rating = sum(c.get("rating", 0) for c in competitors) / max(
-            len(competitors), 1
-        )
-
-        prompt = f"""
-Based on this competitive analysis data, provide 3-5 specific,
-actionable suggestions for improvement:
-
-Business: {user_data.get('name', 'Unknown')}
-Current performance:
-- Rating: {user_data.get('rating', 0):.1f}/5.0
-- Images: {user_data.get('image_count', 0)}
-- Has business hours: {user_data.get('has_hours', False)}
-- Has description: {user_data.get('has_description', False)}
-- Has menu: {user_data.get('has_menu_link', False)}
-
-Competitor average performance:
-- Average rating: {avg_rating:.1f}/5.0
-
-Provide specific, actionable suggestions (one per line, no bullets):
+        Respond ONLY with valid JSON matching the specified format.
+        Do not include any explanatory text outside the JSON.
         """.strip()
 
         return prompt
 
-    def _parse_suggestions(self, content: str) -> List[str]:
-        """Parse suggestions from the LLM response content with improved robustness."""
-        suggestions = []
-
-        # Look for the ACTIONABLE_SUGGESTIONS section
-        if "ACTIONABLE_SUGGESTIONS:" in content:
-            # Split content and get the part after ACTIONABLE_SUGGESTIONS:
-            parts = content.split("ACTIONABLE_SUGGESTIONS:")
-            if len(parts) > 1:
-                suggestions_text = parts[1].strip()
-
-                # Split by lines and clean up
-                for line in suggestions_text.split("\n"):
-                    line = line.strip()
-                    if line and not line.startswith("#"):
-                        # Remove numbering, bullets, and extra whitespace
-                        cleaned = line.lstrip("123456789.•-*").strip()
-                        if cleaned:
-                            suggestions.append(cleaned)
-
-        # Fallback: generate default suggestions if parsing fails or too few
-        if len(suggestions) < 3:
-            suggestions.extend(self._generate_fallback_suggestions())
-
-        return suggestions[:5]  # Return max 5 suggestions
-
-    def _generate_fallback_suggestions(self) -> List[str]:
-        """Generate fallback suggestions if parsing fails."""
-        return [
-            "Encourage customers to leave more reviews",
-            "Add high-quality photos of your business",
-            "Update business hours and contact information",
-            "Respond to customer reviews promptly",
-            "Add a detailed business description",
-        ]
-
-    def _generate_recommendations(
+    def _generate_fallback_recommendations(
         self, user_data: Dict[str, Any], competitor_data: List[Dict[str, Any]]
     ) -> str:
         """Generate specific recommendations."""
@@ -308,10 +211,10 @@ Provide specific, actionable suggestions (one per line, no bullets):
 
         # Review count analysis
         avg_competitor_reviews = sum(
-            c.get("review_count", 0) for c in competitor_data
+            c.get("rating_count", 0) for c in competitor_data
         ) / max(len(competitor_data), 1)
 
-        if user_data.get("review_count", 0) < avg_competitor_reviews:
+        if user_data.get("rating_count", 0) < avg_competitor_reviews:
             recommendations.append(
                 f"• Increase review count - competitors average "
                 f"{avg_competitor_reviews:.0f} reviews"
@@ -327,8 +230,41 @@ Provide specific, actionable suggestions (one per line, no bullets):
         if not user_data.get("has_menu_link", False):
             recommendations.append("• Add menu link or information")
 
-        return (
-            "\n".join(recommendations)
-            if recommendations
-            else "• Your profile looks competitive!"
+        return recommendations
+
+    def _genereate_fallback_response(
+        self,
+        user_business_data: Dict[str, Any],
+        competitor_data: List[Dict[str, Any]]
+    ) -> LLMResponse:
+        """Generate mock JSON response for development."""
+        import json
+
+        user_name = user_business_data.get("name", "Your Business")
+        competitor_count = len(competitor_data)
+
+        mock_response = {
+            "analysis": {
+                "overview": f"{user_name} competes with {competitor_count} similar businesses in the area",
+                "strengths": [
+                    "Strong customer review ratings",
+                    "Complete business profile information"
+                ],
+                "weaknesses": [
+                    "Fewer reviews than competitors",
+                    "Limited business photos"
+                ],
+                "competitive_position": "Middle-tier competitive position with room for improvement"
+            },
+            "suggestions": self._generate_fallback_recommendations(
+                user_business_data, competitor_data)
+        }
+
+        return LLMResponse(
+            content=json.dumps(mock_response["analysis"]),
+            suggestions=mock_response["suggestions"],
+            tokens_used=350,
+            model=self.model,
+            provider=self.provider_name,
+            metadata={"mock": True, "format": "json"}
         )

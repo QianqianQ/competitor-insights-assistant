@@ -49,23 +49,9 @@ class ComparisonReport(models.Model):
     )
 
     # Comparison metadata
-    comparison_data = models.JSONField(
+    metadata = models.JSONField(
         default=dict, help_text="Structured comparison data used for analysis"
     )
-    # llm_provider = models.CharField(
-    #     max_length=50,
-    #     default="openai",
-    #     help_text="LLM provider used for analysis"
-    # )
-    # llm_model = models.CharField(
-    #     max_length=100,
-    #     default="gpt-4",
-    #     help_text="Specific LLM model used"
-    # )
-    # tokens_used = models.PositiveIntegerField(
-    #     default=0,
-    #     help_text="Total tokens used for LLM processing"
-    # )
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)

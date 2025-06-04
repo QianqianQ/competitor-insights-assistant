@@ -7,3 +7,4 @@ psycopg2-binary==2.9.10  # PostgreSQL adapter (for production)
 openai==1.84.0  # OpenAI API client
 httpx==0.28.1  # async HTTP client for external APIs
 structlog==25.4.0  # structured logging
+python-dotenv==1.1.0  # environment variables
