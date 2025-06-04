@@ -192,7 +192,7 @@
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
-              v-for="competitor in store.report.competitor_businesses.slice(0, 3)"
+              v-for="competitor in topCompetitors"
               :key="competitor.identifier_used || competitor.name"
               class="bg-gradient-to-br from-gray-50 to-secondary-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300"
             >
@@ -282,6 +282,30 @@ const parsedAnalysis = computed(() => {
     // If parsing fails, return null to fall back to plain text
     return null;
   }
+});
+
+// Get top 3 competitors sorted by rating and rating count
+const topCompetitors = computed(() => {
+  if (!store.report?.competitor_businesses?.length) return [];
+
+  return store.report.competitor_businesses
+    .slice() // Create a copy to avoid mutating the original array
+    .sort((a, b) => {
+      // Primary sort: by rating (higher is better)
+      const ratingA = a.rating || 0;
+      const ratingB = b.rating || 0;
+
+      if (ratingB !== ratingA) {
+        return ratingB - ratingA; // Higher rating first
+      }
+
+      // Secondary sort: by rating count (more reviews is better)
+      const countA = a.rating_count || 0;
+      const countB = b.rating_count || 0;
+
+      return countB - countA; // Higher count first
+    })
+    .slice(0, 3); // Take top 3
 });
 
 function goBack() {

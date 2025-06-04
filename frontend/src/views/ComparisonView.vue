@@ -16,43 +16,101 @@ const userBusiness = computed(() => store.report?.user_business)
 const competitors = computed(() => store.report?.competitor_businesses || [])
 const hasReport = computed(() => store.hasReport)
 
-// Simple metrics calculation based on available data
-const comparisonMetrics = computed(() => {
+// Helper function to get ranked entries for a metric
+const getRankedEntries = (metricKey: string, maxValue: number) => {
   if (!store.report) return []
 
   const user = store.report.user_business
   const competitorValues = competitors.value
 
+  // Create entries for user business
+  const userEntry = {
+    name: user.name || 'Your Business',
+    score: getMetricValue(user, metricKey),
+    isUserBusiness: true,
+    isAverage: false
+  }
+
+  // Create entries for competitors
+  const competitorEntries = competitorValues.map((competitor, index) => ({
+    name: competitor.name || `Competitor ${index + 1}`,
+    score: getMetricValue(competitor, metricKey),
+    isUserBusiness: false,
+    isAverage: false
+  }))
+
+  // Calculate average score across all businesses (user + competitors)
+  const allScores = [userEntry.score, ...competitorEntries.map(c => c.score)].filter(score => score > 0)
+  const averageScore = allScores.length > 0 ? allScores.reduce((sum, score) => sum + score, 0) / allScores.length : 0
+
+  const averageEntry = {
+    name: 'Average Score',
+    score: Math.round(averageScore * 100) / 100, // Round to 2 decimal places
+    isUserBusiness: false,
+    isAverage: true
+  }
+
+  // Get top 5 competitors
+  const topCompetitors = competitorEntries
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+
+  // Combine all entries and sort by score
+  const allEntries = [...topCompetitors, userEntry, averageEntry]
+    .sort((a, b) => b.score - a.score)
+
+  return allEntries
+}
+
+// Helper function to get metric value from business object
+const getMetricValue = (business: any, metricKey: string) => {
+  switch (metricKey) {
+    case 'rating':
+      return business.rating || 0
+    case 'rating_count':
+      return business.rating_count || 0
+    case 'profile_score':
+      return Math.round((business.profile_score || 0) * 100)
+    case 'image_count':
+      return business.image_count || 0
+    default:
+      return 0
+  }
+}
+
+// Metrics with ranking
+const rankedMetrics = computed(() => {
+  if (!store.report) return []
+
   return [
     {
       name: 'Rating',
-      yourScore: user.rating || 0,
-      competitorScores: competitorValues.map(c => c.rating || 0),
-      industry: 4.4, // Static for now
-      maxValue: 5
+      maxValue: 5,
+      entries: getRankedEntries('rating', 5)
     },
-    // {
-    //   name: 'Number of Ratings',
-    //   yourScore: user.rating_count || 0,
-    //   competitorScores: competitorValues.map(c => c.rating_count || 0),
-    //   industry: 75, // Static for now
-    //   maxValue: 200
-    // },
-    // {
-    //   name: 'Profile Completeness Score',
-    //   yourScore: Math.round((user.profile_score || 0) * 100),
-    //   competitorScores: competitorValues.map(c => Math.round((c.profile_score || 0) * 100)),
-    //   industry: 75, // Static for now
-    //   maxValue: 100
-    // },
-    // {
-    //   name: 'Number of Images',
-    //   yourScore: user.image_count || 0,
-    //   competitorScores: competitorValues.map(c => c.image_count || 0),
-    //   industry: 15, // Static for now
-    //   maxValue: 50
-    // }
-  ]
+    {
+      name: 'Number of Ratings',
+      maxValue: null, // Dynamic max based on highest value
+      entries: getRankedEntries('rating_count', 1000)
+    },
+    {
+      name: 'Profile Score',
+      maxValue: 100,
+      entries: getRankedEntries('profile_score', 100)
+    },
+    {
+      name: 'Number of Images (Mock)',
+      maxValue: 50,
+      entries: getRankedEntries('image_count', 50)
+    }
+  ].map(metric => {
+    // Set dynamic max value if not specified
+    if (metric.maxValue === null) {
+      const maxScore = Math.max(...metric.entries.map(e => e.score))
+      metric.maxValue = Math.max(maxScore, 100) // Minimum of 100 for better visualization
+    }
+    return metric
+  })
 })
 
 const getScoreColor = (score: number, maxValue: number) => {
@@ -61,6 +119,13 @@ const getScoreColor = (score: number, maxValue: number) => {
   if (percentage >= 60) return 'bg-secondary-500'
   if (percentage >= 40) return 'bg-warning-500'
   return 'bg-error-500'
+}
+
+const getRankBadgeClass = (rankIndex: number) => {
+  if (rankIndex === 0) return 'bg-yellow-500' // Gold for 1st place
+  if (rankIndex === 1) return 'bg-gray-400'   // Silver for 2nd place
+  if (rankIndex === 2) return 'bg-amber-600'  // Bronze for 3rd place
+  return 'bg-gray-300'                        // Default for others
 }
 
 const viewDetailedReport = () => {
@@ -163,7 +228,7 @@ onMounted(() => {
       <!-- Metrics Comparison -->
       <div class="mb-8">
         <div class="card">
-          <h2 class="text-xl font-semibold mb-6">Performance Metrics</h2>
+          <h2 class="text-xl font-semibold mb-6">Performance Rankings</h2>
 
           <!-- Overall Scores Summary -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -196,57 +261,46 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Detailed Metrics -->
-          <div class="space-y-6">
-            <div v-for="(metric, index) in comparisonMetrics" :key="index" class="border-b border-gray-200 pb-6">
-              <div class="flex justify-between items-center mb-2">
-                <h3 class="font-medium">{{ metric.name }}</h3>
-                <div class="text-gray-500 text-sm">Max: {{ metric.maxValue }}</div>
+          <!-- Ranked Metrics -->
+          <div class="space-y-8">
+            <div v-for="(metric, index) in rankedMetrics" :key="index" class="border-b border-gray-200 pb-8 last:border-b-0">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold">{{ metric.name }}</h3>
+                <div v-if="metric.maxValue" class="text-sm text-gray-500">Max: {{ metric.maxValue }}</div>
               </div>
 
-              <!-- Your Score -->
-              <div class="mb-4">
-                <div class="flex justify-between items-center mb-1">
-                  <div class="text-sm font-medium">{{ userBusiness?.name }}</div>
-                  <div class="text-sm">{{ metric.yourScore }} / {{ metric.maxValue }}</div>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    class="h-2.5 rounded-full transition-all duration-500"
-                    :class="getScoreColor(metric.yourScore, metric.maxValue)"
-                    :style="`width: ${(metric.yourScore / metric.maxValue) * 100}%`"
-                  ></div>
-                </div>
-              </div>
-
-              <!-- Competitors -->
-              <div v-for="(score, compIndex) in metric.competitorScores" :key="compIndex" class="mb-4">
-                <div class="flex justify-between items-center mb-1">
-                  <div class="text-sm font-medium">
-                    {{ competitors[compIndex]?.name || `Competitor ${compIndex + 1}` }}
+              <!-- Ranked entries -->
+              <div class="space-y-4">
+                <div v-for="(entry, rankIndex) in metric.entries" :key="entry.name"
+                     class="flex items-center p-4 rounded-lg transition-all duration-200 hover:shadow-md"
+                     :class="{
+                       'bg-primary-50 border-l-4 border-primary-500': entry.isUserBusiness,
+                       'bg-yellow-50 border-l-4 border-yellow-400': entry.isAverage,
+                       'bg-gray-50': !entry.isUserBusiness && !entry.isAverage
+                     }">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4"
+                       :class="getRankBadgeClass(rankIndex)">
+                    <span class="text-white font-bold text-sm">{{ rankIndex + 1 }}</span>
                   </div>
-                  <div class="text-sm">{{ score }} / {{ metric.maxValue }}</div>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    class="h-2.5 rounded-full transition-all duration-500"
-                    :class="getScoreColor(score, metric.maxValue)"
-                    :style="`width: ${(score / metric.maxValue) * 100}%`"
-                  ></div>
-                </div>
-              </div>
-
-              <!-- Industry Average -->
-              <div>
-                <div class="flex justify-between items-center mb-1">
-                  <div class="text-sm font-medium">Industry Average</div>
-                  <div class="text-sm">{{ metric.industry }} / {{ metric.maxValue }}</div>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    class="h-2.5 bg-gray-600 rounded-full transition-all duration-500"
-                    :style="`width: ${(metric.industry / metric.maxValue) * 100}%`"
-                  ></div>
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="font-medium text-gray-800">
+                        {{ entry.name }}
+                        <span v-if="entry.isUserBusiness" class="text-sm text-primary-600 ml-2">(Your Business)</span>
+                        <span v-if="entry.isAverage" class="text-sm text-yellow-600 ml-2">(Average)</span>
+                      </span>
+                      <span class="font-mono text-sm text-gray-600">
+                        {{ entry.score }}{{ metric.maxValue ? ` / ${metric.maxValue}` : '' }}
+                      </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div
+                        class="h-3 rounded-full transition-all duration-500"
+                        :class="entry.isAverage ? 'bg-yellow-500' : getScoreColor(entry.score, metric.maxValue)"
+                        :style="`width: ${Math.min((entry.score / metric.maxValue) * 100, 100)}%`"
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
