@@ -34,7 +34,7 @@ export interface DisplayBusinessProfile {
   longitude?: number | null;
   // Frontend calculated score
   profile_score?: number;
-  rank?: number;
+  profile_rank?: number;
 }
 
 // For the Pinia store state

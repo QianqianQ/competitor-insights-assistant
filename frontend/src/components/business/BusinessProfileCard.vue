@@ -1,7 +1,7 @@
 <template>
   <div class="business-profile-card" :class="{ 'user-business': isUserBusiness }">
     <div class="card-header">
-      <h3>{{ business.name }} <span v-if="business.rank">(Rank: {{ business.rank }})</span></h3>
+      <h3>{{ business.name }} <span v-if="business.profile_rank">(Profile Rank: {{ business.profile_rank }})</span></h3>
       <p v-if="business.website" class="website-link">
         <a :href="business.website" target="_blank" rel="noopener noreferrer">{{ business.website }}</a>
       </p>
