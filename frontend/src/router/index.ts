@@ -19,12 +19,7 @@ const router = createRouter({
       beforeEnter: (to: any, from: any, next: any) => {
         // Guard to ensure comparison page is only accessible if a report exists
         const store = useComparisonStore();
-        if (store.hasReport) {
-          next();
-        } else {
-          // If no report, redirect to home page
-          next({ name: 'home' });
-        }
+        store.hasReport ? next() : next({ name: 'home' });
       },
     },
     {
@@ -32,17 +27,18 @@ const router = createRouter({
       name: 'report',
       component: ReportView,
       beforeEnter: (to: any, from: any, next: any) => {
-        // Guard to ensure results page is only accessible if a report exists
         const store = useComparisonStore();
-        if (store.hasReport) {
-          next();
-        } else {
-          // If no report, redirect to input page
-          next({ name: 'home' });
-        }
+        store.hasReport ? next() : next({ name: 'home' });
       },
     },
   ],
+  // Move scrollBehavior here (as a root router option)
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name === 'report') {
+      return { top: 0, behavior: 'smooth' };  // Add smooth scrolling
+    }
+    return savedPosition || { top: 0 };
+  }
 })
 
 export default router

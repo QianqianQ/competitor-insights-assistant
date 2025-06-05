@@ -95,6 +95,11 @@ class ComparisonService:
                 user_business, max_competitors
             )
 
+            # Calculate comparison metrics
+            comparison_metrics = self._calculate_comparison_metrics(
+                user_business, competitor_businesses
+            )
+
             # Generate comparison analysis
             comparison_data = self._prepare_comparison_data(
                 user_business, competitor_businesses
@@ -104,12 +109,14 @@ class ComparisonService:
             llm_response = asyncio.run(self.llm_provider.generate_comparison_analysis(
                 user_business_data=comparison_data["user_business"],
                 competitor_data=comparison_data["competitors"],
+                comparison_metrics=comparison_metrics,
                 report_style=report_style,
             ))
             # For local development
             # llm_response = self.llm_provider.generate_comparison_analysis_test(
             #     user_business_data=comparison_data["user_business"],
             #     competitor_data=comparison_data["competitors"],
+            #     comparison_metrics=comparison_metrics,
             #     report_style=report_style,
             # )
 
@@ -313,6 +320,93 @@ class ComparisonService:
         #     )
         #     # Return empty list if competitor search fails
         #     return []
+
+    def _calculate_comparison_metrics(
+        self,
+        user_business: BusinessProfileData,
+        competitors: List[BusinessProfileData]
+    ) -> Dict[str, Any]:
+        """Calculate comparative metrics for AI context."""
+        if not competitors:
+            return {}
+
+        # Filter valid values with line breaks
+        competitor_ratings = [
+            c.rating for c in competitors
+            if c.rating and c.rating > 0
+        ]
+        competitor_rating_counts = [
+            c.rating_count for c in competitors
+            if c.rating_count and c.rating_count > 0
+        ]
+        competitor_image_count = [
+            c.image_count for c in competitors
+            if c.image_count and c.image_count > 0
+        ]
+
+        # User values
+        user_rating = user_business.rating or 0
+        user_rating_count = user_business.rating_count or 0
+        user_image_count = user_business.image_count or 0
+
+        # Calculate averages
+        avg_rating = (
+            sum(competitor_ratings) / len(competitor_ratings)
+            if competitor_ratings else 0
+        )
+        avg_rating_count = (
+            sum(competitor_rating_counts) / len(competitor_rating_counts)
+            if competitor_rating_counts else 0
+        )
+        avg_image_count = (
+            sum(competitor_image_count) / len(competitor_image_count)
+            if competitor_image_count else 0
+        )
+
+        # Top values
+        top_competitor_rating = max(competitor_ratings) if competitor_ratings else 0
+        top_review_count = max(competitor_rating_counts) if competitor_rating_counts else 0
+        top_image_count = max(competitor_image_count) if competitor_image_count else 0
+
+        # Build metrics dict with clear structure
+        return {
+            # Averages
+            "avg_competitor_rating": round(avg_rating, 1),
+            "avg_competitor_review_count": round(avg_rating_count),
+            "avg_competitor_images": round(avg_image_count),
+
+            # Top values
+            "top_competitor_rating": round(top_competitor_rating, 1),
+            "top_review_count": top_review_count,
+            "top_image_count": top_image_count,
+
+            # Rankings
+            "user_rating_rank": (
+                sum(1 for r in competitor_ratings if r > user_rating) + 1
+            ),
+            "user_review_rank": (
+                sum(1 for c in competitor_rating_counts if c > user_rating_count) + 1
+            ),
+            "total_businesses": len(competitors) + 1,
+
+            # Gaps to top
+            "rating_gap": (
+                round(max(competitor_ratings) - user_rating, 1)
+                if competitor_ratings else 0
+            ),
+            "review_gap": (
+                max(competitor_rating_counts) - user_rating_count
+                if competitor_rating_counts else 0
+            ),
+            "image_gap": (
+                max(competitor_image_count) - user_image_count
+                if competitor_image_count else 0
+            ),
+
+            # Gaps to avg
+            "review_gap_to_avg": max(0, avg_rating_count - user_rating_count),
+            "image_gap_to_avg": max(0, avg_image_count - user_image_count),
+        }
 
     def _prepare_comparison_data(
         self,

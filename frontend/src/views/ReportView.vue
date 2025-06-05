@@ -54,9 +54,9 @@
           <div v-if="store.report" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="text-center p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
               <div class="text-3xl font-bold text-primary-700 mb-1">
-                #{{ store.report.user_business.rank || 'N/A' }}
+                #{{ store.report.user_business.profile_rank }}
               </div>
-              <div class="text-sm text-primary-600 font-medium">Market Rank</div>
+              <div class="text-sm text-primary-600 font-medium">Profile Rank</div>
             </div>
             <div class="text-center p-4 bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl">
               <div class="text-3xl font-bold text-secondary-700 mb-1">

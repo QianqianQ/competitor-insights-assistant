@@ -26,12 +26,12 @@ export const useComparisonStore = defineStore('comparison', {
         const processedCompetitors = data.competitor_businesses.map(
           comp => this.processBusinessProfile(comp));
 
-        // Rank businesses based on score
+        // Profile rank businesses based on profile score
         const allBusinesses = [processedUserBusiness, ...processedCompetitors]
           .sort((a, b) => (b.profile_score || 0) - (a.profile_score || 0));
 
         allBusinesses.forEach((biz, index) => {
-          biz.rank = index + 1;
+          biz.profile_rank = index + 1;
         });
 
         // Create report object

@@ -30,9 +30,22 @@
               with {{ competitors.length }} competitors
             </p>
           </div>
-          <button @click="startNewComparison" class="btn btn-secondary">
-            New Comparison
-          </button>
+          <div class="flex space-x-2">
+            <button
+              @click="viewDetailedReport"
+              class="btn btn-primary flex items-center"
+            >
+              <i class="pi pi-file-pdf mr-2"></i>
+              View Report
+            </button>
+            <button
+              @click="startNewComparison"
+              class="btn btn-secondary flex items-center"
+            >
+              <i class="pi pi-refresh mr-2"></i>
+              New Comparison
+            </button>
+          </div>
         </div>
       </div>
 
@@ -107,9 +120,9 @@
             </div>
 
             <div class="bg-gray-50 rounded-lg p-4 text-center">
-              <h3 class="text-sm font-medium text-gray-600 mb-1">Your Rank</h3>
+              <h3 class="text-sm font-medium text-gray-600 mb-1">Your Profile Rank</h3>
               <div class="text-3xl font-bold text-gray-700">
-                #{{ userBusiness?.rank }}
+                #{{ userBusiness?.profile_rank }}
               </div>
             </div>
           </div>

@@ -49,6 +49,7 @@ class OpenAIProvider:
         self,
         user_business_data: Dict[str, Any],
         competitor_data: List[Dict[str, Any]],
+        comparison_metrics: Dict[str, Any],
         report_style: str = "casual",
         **kwargs,
     ) -> LLMResponse:
@@ -56,7 +57,10 @@ class OpenAIProvider:
         try:
             system_prompt = self._build_system_prompt(report_style)
             user_prompt = self._build_comparison_prompt(
-                user_business_data, competitor_data, report_style
+                user_business_data,
+                competitor_data,
+                comparison_metrics,
+                report_style
             )
 
             response_format = self._get_response_format()
@@ -165,6 +169,7 @@ class OpenAIProvider:
         self,
         user_business_data: Dict[str, Any],
         competitor_data: List[Dict[str, Any]],
+        comparison_metrics: Dict[str, Any],
         report_style: str = "casual",
     ) -> str:
         """Build prompt for JSON-formatted analysis."""
@@ -175,17 +180,44 @@ class OpenAIProvider:
             else "Use friendly, accessible language"
         )
 
+        metrics_context = f"""
+        Competitive Metrics Analysis:
+        1. RATING:
+        • Yours: {user_business_data.get('rating', 'N/A')}
+        • Avg: {comparison_metrics.get('avg_competitor_rating', 'N/A')}
+        • Top: {comparison_metrics.get('top_competitor_rating', 'N/A')}
+        • Rank: {comparison_metrics.get('user_rating_rank', 'N/A')}/
+        {comparison_metrics.get('total_businesses', 'N/A')}
+        • Gap to top: {comparison_metrics.get('rating_gap', 0):.1f} points
+
+        2. RATING COUNT:
+        • Yours: {user_business_data.get('rating_count', 0)}
+        • Avg: {comparison_metrics.get('avg_competitor_review_count', 0)}
+        • Top: {comparison_metrics.get('top_review_count', 0)}
+        • Needed to match avg: {comparison_metrics.get('review_gap_to_avg', 0)}
+
+        3. IMAGES:
+        • Yours: {user_business_data.get('image_count', 0)}
+        • Avg: {comparison_metrics.get('avg_competitor_images', 0)}
+        • Top: {comparison_metrics.get('top_image_count', 0)}
+        • Needed to match avg: {comparison_metrics.get('image_gap_to_avg', 0)}
+        """.strip()
+        print(metrics_context)
+
         prompt = f"""
+        {metrics_context}
+
         Analyze this competitive data and return JSON with:
         1. Analysis of competitive landscape.
-        2. Key strengths/weaknesses.
+        2. Key strengths/weaknesses (reference metrics where relevant).
         3. Competitive position assessment.
         4. 3-5 specific suggestions ({style_note}).
 
         Suggestions should be concise and direct, such as:
-        - "You're missing photos. Your competitors average 20+."
-        - "You haven't responded to recent reviews,
-        consider replying to stay relevant."
+        - "Your rating is {comparison_metrics.get('rating_gap', 0)} points below the leader"
+        - "Your rating count is {comparison_metrics.get('review_gap', 0)} below the leader"
+        - "You're missing photos. Your competitors average {comparison_metrics.get('avg_competitor_images', 0)}+"
+        - "You haven't responded to recent reviews, consider replying to stay relevant."
 
         Avoid bullet points in suggestions.
 
@@ -317,6 +349,7 @@ class OpenAIProvider:
         self,
         user_business_data: Dict[str, Any],
         competitor_data: List[Dict[str, Any]],
+        comparison_metrics: Dict[str, Any],
         report_style: str = "casual",
         **kwargs
     ) -> LLMResponse:
