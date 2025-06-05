@@ -9,14 +9,17 @@ AI-powered business profile comparison tool for restaurants and local businesses
 - **Styling:** Tailwind CSS + PrimeVue
 - **Database:** SQLite for development
 
-## MVP Scope
-- Business profile input interface
-- AI-powered recommendations
-- Basic comparison visualization
+## Features
+- User Input:
+  - Business name or website URL
+  - Style of AI-powered report
+- Comparison Report:
+  - Comparison of business profile data
+  - AI-powered analysis
+  - Visualization of comparison results
 
-## Architecture
-- **Backend:** Django REST API handling business logic and AI integration
-- **Frontend:** Vue.js SPA providing user interface and data visualization
+**Note:** Now the competitor business data is not fetched from the external API. Instead, example data is used (`/backend/providers/mock_data.json`).
+User's business data is mock data generated randomly.
 
 ## Quick Start
 
@@ -53,17 +56,18 @@ npm run dev
 
 Visit http://localhost:5173
 
+## API Endpoints
+
+- `POST /api/v1/comparisons/` - Generate comparison report
+
 ## Skipped Features
-- **External APIs (Serper.dev etc.):** Due to cost and time limits, it was not used in the MVP. Currently,
-the example data uses the same structure as the Serper.dev API response.
-
-- **Nearby or similar business selection:** Skipped due to extternal API integration is not implemented yet and time constraints.
-
-- **Number of images metrics missing:** This metric is not available in the Serper.dev API response data. Maybe some other data source can be used to get this metric. Now mock data is used.
+- **External APIs (Serper.dev etc.):** Due to cost and time limits, mock data is used instead
+- **Nearby/Similar business selection:** Requires external API integration
+- **No of Image metrics:** Not available in current data sources
 
 ## Future Improvements
-- **Performance:** Add Redis + Celery for asynchronous task handling and caching.
-- **AI integration:** Improve AI prompt for better analysis.
-- **UI/UX:** Improve user interface and report visualization.
-- **Business Search:** Add real business search functionality.
-- **Better business profile data presentation:** More comprehensive, accurate and detailed business profile data presentation, which will be helpful for AI analysis.
+- **Performance:** Add Redis + Celery for async tasks (e.g., report generation)
+- **AI integration:** Improve AI prompts for better analysis
+- **UI/UX:** Better visualizations and user interface
+- **Real business search:** Integrate with Google Places or similar APIs
+- **Better business profile data presentation:** More comprehensive, accurate and detailed business profile data presentation, which will be helpful for AI analysis
