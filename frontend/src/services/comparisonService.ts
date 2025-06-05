@@ -27,12 +27,11 @@ export async function fetchComparisonAPI(payload: ComparisonRequestPayload): Pro
     }
 
     const responseData: ComparisonReportData = await response.json();
-
     // Crucial: Ensure the backend is sending `competitors` as an array of objects.
     // If `competitors` is missing or not an array, the ResultsView will break.
     // The current backend ComparisonReportSerializer has `competitor_count` NOT `competitors`.
     // This needs to be reconciled with the backend. For now, we expect `competitors`.
-    if (!Array.isArray(responseData.competitors)) {
+    if (responseData.competitor_businesses && !Array.isArray(responseData.competitor_businesses)) {
       console.warn('API response missing or has invalid format for "competitors". Defaulting to empty array.');
       // If the backend sends competitor_count instead of competitors list:
       // responseData.competitors = []; // Or handle it based on how you want to show this missing data

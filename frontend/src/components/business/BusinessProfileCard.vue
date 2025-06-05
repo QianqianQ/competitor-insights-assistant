@@ -11,10 +11,10 @@
     <div class="card-body">
       <h4>Key Metrics:</h4>
       <ul>
-        <li><strong>Rating:</strong> {{ business.rating?.toFixed(1) || 'N/A' }} / 5 ({{ business.rating_count || 0 }} reviews)</li>
-        <li><strong>Images:</strong> {{ business.image_count || 0 }}</li>
-        <li><strong>Category:</strong> {{ business.category || 'N/A' }}</li>
-        <li><strong>Profile Score:</strong> {{ business.profile_score?.toFixed(2) || 'N/A' }} / 1.0</li>
+        <li><strong>Rating:</strong> {{ business.rating }} / 5 ({{ business.rating_count }} reviews)</li>
+        <li><strong>Images:</strong> {{ business.image_count }}</li>
+        <li><strong>Category:</strong> {{ business.category }}</li>
+        <li><strong>Profile Score:</strong> {{ business.profile_score}}</li>
       </ul>
 
       <h4>Profile Checklist:</h4>

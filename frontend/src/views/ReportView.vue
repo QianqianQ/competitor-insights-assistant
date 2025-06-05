@@ -60,19 +60,19 @@
             </div>
             <div class="text-center p-4 bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl">
               <div class="text-3xl font-bold text-secondary-700 mb-1">
-                {{ store.report.user_business.rating?.toFixed(1) || 'N/A' }}
+                {{ store.report.user_business.rating }}
               </div>
               <div class="text-sm text-secondary-600 font-medium">Average Rating</div>
             </div>
             <div class="text-center p-4 bg-gradient-to-br from-success-50 to-success-100 rounded-xl">
               <div class="text-3xl font-bold text-success-700 mb-1">
-                {{ store.report.user_business.rating_count || 0 }}
+                {{ store.report.user_business.rating_count }}
               </div>
               <div class="text-sm text-success-600 font-medium">Total Reviews</div>
             </div>
             <div class="text-center p-4 bg-gradient-to-br from-accent-50 to-accent-100 rounded-xl">
               <div class="text-3xl font-bold text-accent-700 mb-1">
-                {{ Math.round((store.report.user_business.profile_score || 0) * 100) }}%
+                {{ store.report.user_business.profile_score }}%
               </div>
               <div class="text-sm text-accent-600 font-medium">Profile Score</div>
             </div>
@@ -191,23 +191,23 @@
         <div v-if="store.report && store.report.competitor_businesses?.length > 0" class="card">
           <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
             <i class="pi pi-users text-secondary-600 mr-3"></i>
-            Competitor Overview
+            Top Competitors
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               v-for="competitor in topCompetitors"
-              :key="competitor.identifier_used || competitor.name"
+              :key="competitor.name"
               class="bg-gradient-to-br from-gray-50 to-secondary-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300"
             >
               <div class="text-center">
                 <h3 class="font-semibold text-gray-800 mb-2">{{ competitor.name }}</h3>
                 <div class="flex justify-center space-x-4 text-sm text-gray-600">
                   <div>
-                    <span class="font-medium">{{ competitor.rating?.toFixed(1) || 'N/A' }}</span>
+                    <span class="font-medium">{{ competitor.rating }}</span>
                     <i class="pi pi-star-fill text-yellow-400 ml-1"></i>
                   </div>
                   <div>
-                    <span class="font-medium">{{ competitor.rating_count || 0 }}</span>
+                    <span class="font-medium">{{ competitor.rating_count }}</span>
                     <span class="text-xs ml-1">reviews</span>
                   </div>
                 </div>

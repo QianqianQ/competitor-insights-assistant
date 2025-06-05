@@ -1,153 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useComparisonStore } from '@/stores/comparisonStore'
-import BusinessProfileCard from '@/components/business/BusinessProfileCard.vue'
-import BusinessSearchForm from '@/components/business/BusinessSearchForm.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ErrorMessage from '@/components/ErrorMessage.vue'
-
-const router = useRouter()
-const store = useComparisonStore()
-const showCompetitors = ref(false) // Toggle state for competitor section
-
-// Computed properties for easier access to store data
-const userBusiness = computed(() => store.report?.user_business)
-const competitors = computed(() => store.report?.competitor_businesses || [])
-const hasReport = computed(() => store.hasReport)
-
-// Helper function to get ranked entries for a metric
-const getRankedEntries = (metricKey: string, maxValue: number) => {
-  if (!store.report) return []
-
-  const user = store.report.user_business
-  const competitorValues = competitors.value
-
-  // Create entries for user business
-  const userEntry = {
-    name: user.name || 'Your Business',
-    score: getMetricValue(user, metricKey),
-    isUserBusiness: true,
-    isAverage: false
-  }
-
-  // Create entries for competitors
-  const competitorEntries = competitorValues.map((competitor, index) => ({
-    name: competitor.name || `Competitor ${index + 1}`,
-    score: getMetricValue(competitor, metricKey),
-    isUserBusiness: false,
-    isAverage: false
-  }))
-
-  // Calculate average score across all businesses (user + competitors)
-  const allScores = [userEntry.score, ...competitorEntries.map(c => c.score)].filter(score => score > 0)
-  const averageScore = allScores.length > 0 ? allScores.reduce((sum, score) => sum + score, 0) / allScores.length : 0
-
-  const averageEntry = {
-    name: 'Average Score',
-    score: Math.round(averageScore * 100) / 100, // Round to 2 decimal places
-    isUserBusiness: false,
-    isAverage: true
-  }
-
-  // Get top 5 competitors
-  const topCompetitors = competitorEntries
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
-
-  // Combine all entries and sort by score
-  const allEntries = [...topCompetitors, userEntry, averageEntry]
-    .sort((a, b) => b.score - a.score)
-
-  return allEntries
-}
-
-// Helper function to get metric value from business object
-const getMetricValue = (business: any, metricKey: string) => {
-  switch (metricKey) {
-    case 'rating':
-      return business.rating || 0
-    case 'rating_count':
-      return business.rating_count || 0
-    case 'profile_score':
-      return Math.round((business.profile_score || 0) * 100)
-    case 'image_count':
-      return business.image_count || 0
-    default:
-      return 0
-  }
-}
-
-// Metrics with ranking
-const rankedMetrics = computed(() => {
-  if (!store.report) return []
-
-  return [
-    {
-      name: 'Rating',
-      maxValue: 5,
-      entries: getRankedEntries('rating', 5)
-    },
-    {
-      name: 'Number of Ratings',
-      maxValue: null, // Dynamic max based on highest value
-      entries: getRankedEntries('rating_count', 1000)
-    },
-    {
-      name: 'Profile Score',
-      maxValue: 100,
-      entries: getRankedEntries('profile_score', 100)
-    },
-    {
-      name: 'Number of Images',
-      maxValue: 50,
-      entries: getRankedEntries('image_count', 50)
-    }
-  ].map(metric => {
-    // Set dynamic max value if not specified
-    if (metric.maxValue === null) {
-      const maxScore = Math.max(...metric.entries.map(e => e.score))
-      metric.maxValue = Math.max(maxScore, 100) // Minimum of 100 for better visualization
-    }
-    return metric
-  })
-})
-
-const getScoreColor = (score: number, maxValue: number) => {
-  const percentage = (score / maxValue) * 100
-  if (percentage >= 80) return 'bg-success-500'
-  if (percentage >= 60) return 'bg-secondary-500'
-  if (percentage >= 40) return 'bg-warning-500'
-  return 'bg-error-500'
-}
-
-const getRankBadgeClass = (rankIndex: number) => {
-  if (rankIndex === 0) return 'bg-yellow-500' // Gold for 1st place
-  if (rankIndex === 1) return 'bg-gray-400'   // Silver for 2nd place
-  if (rankIndex === 2) return 'bg-amber-600'  // Bronze for 3rd place
-  return 'bg-gray-300'                        // Default for others
-}
-
-const viewDetailedReport = () => {
-  router.push({ name: 'report' })
-}
-
-const startNewComparison = () => {
-  store.isNavigating = true;
-  router.push({ name: 'home' }).then(() => {
-    store.clearReport()
-    store.isNavigating = false;
-  })
-}
-
-onMounted(() => {
-  // If no report exists, redirect to home
-  if (!store.hasReport) {
-    router.push({ name: 'home' })
-  }
-})
-</script>
-
 <template>
   <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     <!-- Loading State -->
@@ -215,7 +65,7 @@ onMounted(() => {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <BusinessProfileCard
                 v-for="competitor in competitors"
-                :key="competitor.identifier_used || competitor.name"
+                :key="competitor.name"
                 :business="competitor"
                 :is-user-business="false"
               />
@@ -238,33 +88,33 @@ onMounted(() => {
             <div class="bg-primary-50 rounded-lg p-4 text-center">
               <h3 class="text-sm font-medium text-gray-600 mb-1">Your Profile Score</h3>
               <div class="text-3xl font-bold text-primary-700">
-                {{ Math.round((userBusiness?.profile_score || 0) * 100) }}%
+                {{ userBusiness?.profile_score }}%
               </div>
             </div>
 
             <div class="bg-gray-50 rounded-lg p-4 text-center">
               <h3 class="text-sm font-medium text-gray-600 mb-1">Your Rating</h3>
               <div class="text-3xl font-bold text-gray-700">
-                {{ userBusiness?.rating?.toFixed(1) || 'N/A' }}
+                {{ userBusiness?.rating }}
               </div>
             </div>
 
             <div class="bg-gray-50 rounded-lg p-4 text-center">
               <h3 class="text-sm font-medium text-gray-600 mb-1">Your Number of Ratings</h3>
               <div class="text-3xl font-bold text-gray-700">
-                {{ userBusiness?.rating_count || 0 }}
+                {{ userBusiness?.rating_count }}
               </div>
             </div>
 
             <div class="bg-gray-50 rounded-lg p-4 text-center">
               <h3 class="text-sm font-medium text-gray-600 mb-1">Your Rank</h3>
               <div class="text-3xl font-bold text-gray-700">
-                #{{ userBusiness?.rank || 'N/A' }}
+                #{{ userBusiness?.rank }}
               </div>
             </div>
           </div>
 
-          <!-- Ranked Metrics -->
+          <!-- Ranked Metrics Charts -->
           <div class="space-y-8">
             <div v-for="(metric, index) in rankedMetrics" :key="index" class="border-b border-gray-200 pb-8 last:border-b-0">
               <div class="flex justify-between items-center mb-6">
@@ -299,8 +149,8 @@ onMounted(() => {
                     <div class="w-full bg-gray-200 rounded-full h-3">
                       <div
                         class="h-3 rounded-full transition-all duration-500"
-                        :class="entry.isAverage ? 'bg-yellow-500' : getScoreColor(entry.score, metric.maxValue)"
-                        :style="`width: ${Math.min((entry.score / metric.maxValue) * 100, 100)}%`"
+                        :class="entry.isAverage ? 'bg-yellow-500' : getScoreColor(entry.score, metric.maxValue || 100)"
+                        :style="`width: ${Math.min((entry.score / (metric.maxValue || 100)) * 100, 100)}%`"
                       ></div>
                     </div>
                   </div>
@@ -325,3 +175,155 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useComparisonStore } from '@/stores/comparisonStore'
+import BusinessProfileCard from '@/components/business/BusinessProfileCard.vue'
+import BusinessSearchForm from '@/components/business/BusinessSearchForm.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
+
+const router = useRouter();
+const store = useComparisonStore();
+const showCompetitors = ref(false); // Toggle state for competitor section
+
+// Computed properties for easier access to store data
+const userBusiness = computed(() => store.report?.user_business);
+const competitors = computed(() => store.report?.competitor_businesses || []);
+const hasReport = computed(() => store.hasReport);
+
+// Metrics with ranking
+const rankedMetrics = computed(() => {
+  if (!store.report) return [];
+
+  return [
+    {
+      name: 'Rating',
+      maxValue: 5 as number | null,
+      entries: getRankedEntries('rating')
+    },
+    {
+      name: 'Number of Ratings',
+      maxValue: null, // Dynamic max based on highest value
+      entries: getRankedEntries('rating_count')
+    },
+    {
+      name: 'Profile Score',
+      maxValue: 100,
+      entries: getRankedEntries('profile_score')
+    },
+    {
+      name: 'Number of Images',
+      maxValue: 50,
+      entries: getRankedEntries('image_count')
+    }
+  ].map(metric => {
+    // Set dynamic max value if not specified
+    if (metric.maxValue === null) {
+      const maxScore = Math.max(...metric.entries.map(e => e.score));
+      metric.maxValue = Math.max(maxScore, 100); // Minimum of 100 for better visualization
+    }
+    return metric;
+  })
+});
+
+// Helper function to get ranked entries for a metric
+const getRankedEntries = (metricKey: string) => {
+  if (!store.report) return [];
+
+  const user = store.report.user_business;
+  const competitorValues = competitors.value;
+
+  // Create entries for user business
+  const userEntry = {
+    name: user.name || 'Your Business',
+    score: getMetricValue(user, metricKey),
+    isUserBusiness: true,
+    isAverage: false
+  };
+
+  // Create entries for competitors
+  const competitorEntries = competitorValues.map((competitor, index) => ({
+    name: competitor.name || `Competitor ${index + 1}`,
+    score: getMetricValue(competitor, metricKey),
+    isUserBusiness: false,
+    isAverage: false
+  }));
+
+  // Calculate average score across all businesses (user + competitors)
+  const allScores = [userEntry.score, ...competitorEntries.map(c => c.score)]
+    .filter(score => score > 0);
+  const averageScore = allScores.length > 0 ?
+  allScores.reduce((sum, score) => sum + score, 0) / allScores.length : 0;
+
+  const averageEntry = {
+    name: 'Average Score',
+    score: Math.round(averageScore * 100) / 100, // Round to 2 decimal places
+    isUserBusiness: false,
+    isAverage: true
+  };
+
+  // Get top 5 competitors
+  const topCompetitors = competitorEntries
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+
+  // Combine all entries and sort by score
+  const allEntries = [...topCompetitors, userEntry, averageEntry]
+    .sort((a, b) => b.score - a.score);
+
+  return allEntries;
+}
+
+// Helper function to get metric value from business object
+const getMetricValue = (business: any, metricKey: string) => {
+  switch (metricKey) {
+    case 'rating':
+      return business.rating
+    case 'rating_count':
+      return business.rating_count
+    case 'profile_score':
+      return business.profile_score
+    case 'image_count':
+      return business.image_count
+    default:
+      return 0
+  }
+}
+
+const getScoreColor = (score: number, maxValue: number) => {
+  const percentage = (score / maxValue) * 100;
+  if (percentage >= 80) return 'bg-success-500';
+  if (percentage >= 60) return 'bg-secondary-500';
+  if (percentage >= 40) return 'bg-warning-500';
+  return 'bg-error-500';
+}
+
+const getRankBadgeClass = (rankIndex: number) => {
+  if (rankIndex === 0) return 'bg-yellow-500'; // Gold for 1st place
+  if (rankIndex === 1) return 'bg-gray-400';   // Silver for 2nd place
+  if (rankIndex === 2) return 'bg-amber-600';  // Bronze for 3rd place
+  return 'bg-gray-300';                        // Default for others
+}
+
+const viewDetailedReport = () => {
+  router.push({ name: 'report' });
+}
+
+const startNewComparison = () => {
+  store.isNavigating = true;
+  router.push({ name: 'home' }).then(() => {
+    store.clearReport();
+    store.isNavigating = false;
+  })
+}
+
+onMounted(() => {
+  // If no report exists, redirect to home
+  if (!store.hasReport) {
+    router.push({ name: 'home' });
+  }
+})
+</script>
