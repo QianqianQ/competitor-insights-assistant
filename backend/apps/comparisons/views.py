@@ -11,6 +11,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.common.logging import get_logger
+from apps.comparisons.models import ComparisonReport
 from apps.comparisons.serializers import (
     ComparisonReportSerializer,
     ComparisonRequestSerializer,
@@ -40,15 +41,14 @@ class ComparisonViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     permission_classes = [permissions.AllowAny]  # TODO: Update for auth
 
-    # def get_queryset(self):
-    #     """Return queryset with optimized queries."""
-    #     return ComparisonReport.objects.select_related(
-    #         "user_business",
-    #         "user_business__attributes"
-    #     ).prefetch_related(
-    #         "competitors",
-    #         "competitors__attributes"
-    #     ).order_by("-created_at")
+    def get_queryset(self):
+        """Return queryset with optimized queries."""
+        # return ComparisonReport.objects.select_related(
+        #     "user_business",
+        # ).prefetch_related(
+        #     "competitor_businesses",
+        # ).order_by("-created_at")
+        return ComparisonReport.objects.all().order_by("-created_at")
 
     def get_serializer_class(self):
         """Return appropriate serializer based on action."""

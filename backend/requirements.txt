@@ -9,3 +9,4 @@ httpx==0.28.1  # async HTTP client for external APIs
 structlog==25.4.0  # structured logging
 python-dotenv==1.1.0  # environment variables
 requests==2.32.3  # HTTP client for external APIs
+gunicorn==23.0.0  # Production server
