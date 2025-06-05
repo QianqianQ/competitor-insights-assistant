@@ -99,7 +99,7 @@ const rankedMetrics = computed(() => {
       entries: getRankedEntries('profile_score', 100)
     },
     {
-      name: 'Number of Images (Mock)',
+      name: 'Number of Images',
       maxValue: 50,
       entries: getRankedEntries('image_count', 50)
     }

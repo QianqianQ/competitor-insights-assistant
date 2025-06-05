@@ -152,9 +152,13 @@ class OpenAIProvider:
 
         Requirements:
         - {style_instruction}
-        - Include exactly 3-5 suggestions
-        - Respond ONLY with valid JSON
-        - Do not include any text outside the JSON structure
+        - Suggestions should be concise and direct, starting with phrases like:
+            - 'You're missing...'
+            - 'Consider...'
+            - 'Your competitors average...'
+        - Include exactly 3-5 suggestions.
+        - Respond ONLY with valid JSON.
+        - Do not include any text outside the JSON structure.
         """.strip()
 
     def _build_comparison_prompt(
@@ -173,10 +177,17 @@ class OpenAIProvider:
 
         prompt = f"""
         Analyze this competitive data and return JSON with:
-        1. Analysis of competitive landscape
-        2. Key strengths/weaknesses
-        3. Competitive position assessment
-        4. 3-5 specific suggestions ({style_note})
+        1. Analysis of competitive landscape.
+        2. Key strengths/weaknesses.
+        3. Competitive position assessment.
+        4. 3-5 specific suggestions ({style_note}).
+
+        Suggestions should be concise and direct, such as:
+        - "You're missing photos. Your competitors average 20+."
+        - "You haven't responded to recent reviews,
+        consider replying to stay relevant."
+
+        Avoid bullet points in suggestions.
 
         Data:
         - My Business: {user_business_data}
@@ -282,19 +293,19 @@ class OpenAIProvider:
 
         if user_data.get("rating_count", 0) < avg_competitor_reviews:
             recommendations.append(
-                f"• Increase review count - competitors average "
+                f"Increase review count - competitors average "
                 f"{avg_competitor_reviews:.0f} reviews"
             )
 
         # Business info completeness
         if not user_data.get("has_hours", False):
-            recommendations.append("• Add business hours information")
+            recommendations.append("Add business hours information")
 
         if not user_data.get("has_description", False):
-            recommendations.append("• Add a business description")
+            recommendations.append("Add a business description")
 
         if not user_data.get("has_menu_link", False):
-            recommendations.append("• Add menu link or information")
+            recommendations.append("Add menu link or information")
 
         return recommendations
 
