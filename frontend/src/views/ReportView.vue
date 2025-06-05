@@ -51,7 +51,7 @@
             <i class="pi pi-chart-line text-primary-600 mr-3"></i>
             Performance Overview
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div v-if="store.report" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="text-center p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
               <div class="text-3xl font-bold text-primary-700 mb-1">
                 #{{ store.report.user_business.rank || 'N/A' }}
@@ -85,7 +85,7 @@
             <i class="pi pi-building text-primary-600 mr-3"></i>
             Your Business Profile
           </h2>
-          <div class="bg-gradient-to-r from-primary-50 to-secondary-50 p-6 rounded-xl">
+          <div v-if="store.report" class="bg-gradient-to-r from-primary-50 to-secondary-50 p-6 rounded-xl">
             <BusinessProfileCard :business="store.report.user_business" :is-user-business="true" />
           </div>
         </div>
@@ -148,8 +148,11 @@
           <!-- Fallback for plain text analysis -->
           <div v-else class="bg-gradient-to-r from-warning-50 to-accent-50 p-6 rounded-xl border-l-4 border-warning-400">
             <div class="prose prose-lg max-w-none">
-              <p class="text-gray-700 leading-relaxed text-lg">
+              <p v-if="store.report" class="text-gray-700 leading-relaxed text-lg">
                 {{ store.report.ai_comparison_summary }}
+              </p>
+              <p v-else class="text-gray-700 leading-relaxed text-lg">
+                No analysis available
               </p>
             </div>
           </div>
@@ -161,7 +164,7 @@
             <i class="pi pi-thumbs-up text-success-600 mr-3"></i>
             Actionable Recommendations
           </h2>
-          <div class="space-y-4">
+          <div v-if="store.report" class="space-y-4">
             <div
               v-for="(suggestion, index) in store.report.ai_improvement_suggestions"
               :key="index"
@@ -185,7 +188,7 @@
         </div>
 
         <!-- Competitors Preview -->
-        <div v-if="store.report.competitor_businesses?.length > 0" class="card">
+        <div v-if="store.report && store.report.competitor_businesses?.length > 0" class="card">
           <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
             <i class="pi pi-users text-secondary-600 mr-3"></i>
             Competitor Overview
@@ -224,7 +227,7 @@
             <div class="mb-4 md:mb-0">
               <h3 class="text-lg font-semibold text-gray-800 mb-2">Report Information</h3>
               <p class="text-gray-600">
-                Generated on {{ new Date(store.report.created_at || Date.now()).toLocaleDateString('en-US', {
+                Generated on {{ new Date(store.report?.created_at || Date.now()).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -232,7 +235,7 @@
                   minute: '2-digit'
                 }) }}
               </p>
-              <p v-if="store.report.metadata" class="text-sm text-gray-500 mt-1">
+              <p v-if="store.report?.metadata" class="text-sm text-gray-500 mt-1">
                 Powered by {{ store.report.metadata.llm_provider || 'AI' }}
                 <span v-if="store.report.metadata.llm_model">({{ store.report.metadata.llm_model }})</span>
               </p>

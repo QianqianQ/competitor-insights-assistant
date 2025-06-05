@@ -1,20 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-const mobileMenuOpen = ref(false);
-
-const navigateTo = (route: string) => {
-  router.push(route);
-  mobileMenuOpen.value = false;
-}
-
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value;
-}
-</script>
-
 <template>
   <header class="bg-white shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,3 +77,20 @@ const toggleMobileMenu = () => {
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const mobileMenuOpen = ref(false);
+
+const navigateTo = (route: string) => {
+  router.push(route);
+  mobileMenuOpen.value = false;
+}
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value;
+}
+</script>

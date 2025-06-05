@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import BusinessSearchForm from '../components/business/BusinessSearchForm.vue'
-import FeatureCard from '../components/FeatureCard.vue'
-
-</script>
-
 <template>
   <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
     <!-- Hero Section -->
@@ -63,3 +57,8 @@ import FeatureCard from '../components/FeatureCard.vue'
     </section>
   </div>
 </template>
+
+<script setup lang="ts">
+import BusinessSearchForm from '@/components/business/BusinessSearchForm.vue'
+import FeatureCard from '@/components/FeatureCard.vue'
+</script>
