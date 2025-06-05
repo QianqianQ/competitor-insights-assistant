@@ -126,7 +126,7 @@ async function submitComparisonRequest() {
 
     <div class="mb-6">
       <div class="flex items-center justify-between mb-4">
-        <label class="text-md font-medium text-gray-700">Select competitor type</label>
+        <label class="text-md font-medium text-gray-700">Select competitor type (Not implemented yet)</label>
         <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
           <input
             type="checkbox"

@@ -1,7 +1,7 @@
 import type { ComparisonRequestPayload, ComparisonReportData } from '@/types/comparison';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
-
+console.log('API_BASE_URL', API_BASE_URL);
 export async function fetchComparisonAPI(payload: ComparisonRequestPayload): Promise<ComparisonReportData> {
   try {
     const response = await fetch(`${API_BASE_URL}/comparisons/`, {
