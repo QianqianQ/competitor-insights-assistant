@@ -117,7 +117,7 @@ async function submitComparisonRequest() {
           type="text"
           id="business-identifier"
           v-model="userBusinessIdentifier"
-          placeholder="e.g., Joe's Pizza or your-restaurant.com"
+          placeholder="e.g., Joe's Pizza or https://your-restaurant.com"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         />
       </div>
