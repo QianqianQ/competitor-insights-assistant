@@ -1,0 +1,663 @@
+{
+  "ll": "@62.5856389,25.2033301,6z",
+  "places": [
+    {
+      "position": 1,
+      "title": "Baskeri & Basso",
+      "address": "Tehtaankatu 27-29 (sisäpiha), 00150 Helsinki",
+      "latitude": 60.1578436,
+      "longitude": 24.9345428,
+      "rating": 4.7,
+      "ratingCount": 794,
+      "priceLevel": "€50+",
+      "type": "Restaurant",
+      "types": [
+        "Restaurant"
+      ],
+      "website": "http://basbas.fi/bistro/",
+      "phoneNumber": "050 4673400",
+      "description": "Cozy, French-inspired wine bar & bistro offering natural wines, simple small plates & charcuterie.",
+      "openingHours": {
+        "Tuesday": "4 pm–1 am",
+        "Wednesday": "4 pm–1 am",
+        "Thursday": "4 pm–1 am",
+        "Friday": "4 pm–1 am",
+        "Saturday": "Closed",
+        "Sunday": "Closed",
+        "Monday": "Closed"
+      },
+      "bookingLinks": [
+        "http://basbas.fi/bistro/"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nohM-S7ARbAkCxs0LUn5t492MT-IX983PpQFRb7NjIdIiB8iY_ntIRBkSbpZEwoDMonLwO3sbPXyoJVAb6t8Kt7gWcNMWzkue3Ylg0Eu0cZBM7_aQSNGoEeCz-RAckhNRMEWqPfvw",
+      "cid": "11069212542265113948",
+      "fid": "0x46920bb6a393c977:0x999dbe28f502bd5c",
+      "placeId": "ChIJd8mTo7YLkkYRXL0C9Si-nZk"
+    },
+    {
+      "position": 2,
+      "title": "Restaurant Everest Katajanokka",
+      "address": "Luotsikatu 12 A, 00160 Helsinki",
+      "latitude": 60.1678712,
+      "longitude": 24.966352399999998,
+      "rating": 4.6,
+      "ratingCount": 980,
+      "priceLevel": "€€",
+      "type": "Restaurant",
+      "types": [
+        "Restaurant"
+      ],
+      "website": "http://everestnokka.fi/",
+      "phoneNumber": "050 4717003",
+      "openingHours": {
+        "Wednesday": "10:30 am–10 pm",
+        "Thursday": "10:30 am–10 pm",
+        "Friday": "10:30 am–10 pm",
+        "Saturday": "12–10 pm",
+        "Sunday": "12–10 pm",
+        "Monday": "10:30 am–10 pm",
+        "Tuesday": "10:30 am–10 pm"
+      },
+      "bookingLinks": [
+        "http://www.everestnokka.fi/",
+        "https://foodora.fi/restaurant/s0cy/everest-katajanokka?utm_source=google&utm_medium=organic&utm_campaign=google_reserve_place_order_action"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqEisEL7MZZz9w7QaBO8QdZvqx-YhJ1psa7Xj19DtAisxH-A0V_0JKv6Yzmex7RHrU189uACANDqnWZUqV28lSB5RvokFR_nJMKWCUxS6ZmszlFbSumi9ky7mmriYfp1iO0u-2t",
+      "cid": "1452959524501616782",
+      "fid": "0x46920bc4bbae3929:0x1429f2fd4af0788e",
+      "placeId": "ChIJKTmuu8QLkkYRjnjwSv3yKRQ"
+    },
+    {
+      "position": 3,
+      "title": "Restaurant Kuu",
+      "address": "Töölönkatu 27, 00260 Helsinki",
+      "latitude": 60.1802919,
+      "longitude": 24.9250927,
+      "rating": 4.6,
+      "ratingCount": 1439,
+      "priceLevel": "€50+",
+      "type": "Finnish restaurant",
+      "types": [
+        "Finnish restaurant"
+      ],
+      "website": "http://www.ravintolakuu.fi/",
+      "phoneNumber": "09 27090973",
+      "description": "French-influenced fine dining & wine in an old-timey setting with a covered terrace.",
+      "openingHours": {
+        "Wednesday": "4–11 pm",
+        "Thursday": "4–11 pm",
+        "Friday": "4–11 pm",
+        "Saturday": "2–11 pm",
+        "Sunday": "2–11 pm",
+        "Monday": "4–11 pm",
+        "Tuesday": "4–11 pm"
+      },
+      "bookingLinks": [
+        "https://v2.tableonline.fi/instabook/bookings/427/ezxFS6z",
+        "https://www.google.com/maps/reserve/v/dine/c/wEVkxrX3RCk?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipPmVfcz6Rt5yhUQlFHmJrCqPAogks0a9cxWWduY",
+      "cid": "3321892468082145881",
+      "fid": "0x46920a2f9e2e092f:0x2e19bb997e14fa59",
+      "placeId": "ChIJLwkuni8KkkYRWfoUfpm7GS4"
+    },
+    {
+      "position": 4,
+      "title": "Lappi Ravintola",
+      "address": "Annankatu 22, 00100 Helsinki",
+      "latitude": 60.1666812,
+      "longitude": 24.9369451,
+      "rating": 4.5,
+      "ratingCount": 2356,
+      "priceLevel": "€50+",
+      "type": "Finnish restaurant",
+      "types": [
+        "Finnish restaurant"
+      ],
+      "website": "http://www.lappires.com/",
+      "phoneNumber": "09 645550",
+      "description": "Cozy wood-paneled restaurant specialized in hearty Lappish reindeer & seafood dishes.",
+      "openingHours": {
+        "Wednesday": "4–10 pm",
+        "Thursday": "4–10 pm",
+        "Friday": "4–10 pm",
+        "Saturday": "4–10 pm",
+        "Sunday": "Closed",
+        "Monday": "4–10 pm",
+        "Tuesday": "4–10 pm"
+      },
+      "bookingLinks": [
+        "https://www.quandoo.fi/place/lappi-ravintola-9753?aid=63&rwg_token=ACgRB3eRoGm6cNxdJ0jdTNOihAcMpcfJw0UxAeWGnlrWcyJKSUoC-2Bwetov3vlfv40rWZvAdnMJqdG57Gv6_AzFf681Mrrv6g%3D%3D",
+        "https://www.google.com/maps/reserve/v/dine/c/V7tphVcQuYE?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipO4SWbdz28UlDJVB329KbnVM6QnG2m2y1xkkF0",
+      "cid": "2110649647777942279",
+      "fid": "0x46920bcb09f0a6df:0x1d4a88ac051b8b07",
+      "placeId": "ChIJ36bwCcsLkkYRB4sbBayISh0"
+    },
+    {
+      "position": 5,
+      "title": "Ravintola Ragu",
+      "address": "Ludviginkatu 3-5, 00130 Helsinki",
+      "latitude": 60.1658596,
+      "longitude": 24.9446808,
+      "rating": 4.6,
+      "ratingCount": 1085,
+      "priceLevel": "€50+",
+      "type": "Restaurant",
+      "types": [
+        "Restaurant"
+      ],
+      "website": "http://www.ragu.fi/",
+      "phoneNumber": "09 596659",
+      "description": "Sophisticated restaurant serving creative, seasonal menus & wine pairings in a light-filled space.",
+      "openingHours": {
+        "Wednesday": "5 pm–12 am",
+        "Thursday": "5 pm–12 am",
+        "Friday": "5 pm–12 am",
+        "Saturday": "5 pm–12 am",
+        "Sunday": "Closed",
+        "Monday": "5 pm–12 am",
+        "Tuesday": "5 pm–12 am"
+      },
+      "bookingLinks": [
+        "https://www.google.com/maps/reserve/v/dine/c/DmQwRgx25Ao?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqYqsgxxEBGVvYE9dr7wAfv2aEU-yheqkma2oHa0NiGU2W8oFqnkPqFNB1OX0APQsG3-p2PhZR9WDMIMfHi01A6phlIi07-2cMkPLf8Y6ccXse1T_c1BHT_O9dY1SOHm2J-SNv9Nw",
+      "cid": "15410975898742168344",
+      "fid": "0x46920bc947400127:0xd5dec8edd6a21b18",
+      "placeId": "ChIJJwFAR8kLkkYRGBui1u3I3tU"
+    },
+    {
+      "position": 6,
+      "title": "Ravintola-Ristorante Toscana",
+      "address": "Hallituskatu 35, 90100 Oulu",
+      "latitude": 65.0113168,
+      "longitude": 25.4818619,
+      "rating": 4.7,
+      "ratingCount": 549,
+      "priceLevel": "€50+",
+      "type": "Italian restaurant",
+      "types": [
+        "Italian restaurant",
+        "Meat dish restaurant",
+        "Restaurant",
+        "Vegetarian restaurant"
+      ],
+      "website": "http://www.ravintolatoscana.fi/",
+      "phoneNumber": "08 332133",
+      "description": "Traditional, quaint Italian restaurant fixing up pasta, risotto, seafood & meat dishes, plus wine.",
+      "openingHours": {
+        "Wednesday": "1–10 pm",
+        "Thursday": "1–10 pm",
+        "Friday": "1–10 pm",
+        "Saturday": "1–10 pm",
+        "Sunday": "Closed",
+        "Monday": "Closed",
+        "Tuesday": "1–10 pm"
+      },
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipPIUIww3NN64m45FL6AbNlXgA2djxdx_-H8iPcP",
+      "cid": "13251338964709218513",
+      "fid": "0x468032ac17bceca1:0xb7e636946dc918d1",
+      "placeId": "ChIJoey8F6wygEYR0RjJbZQ25rc"
+    },
+    {
+      "position": 7,
+      "title": "Ravintola Kolme Kruunua",
+      "address": "Liisankatu 5, 00170 Helsinki",
+      "latitude": 60.174336999999994,
+      "longitude": 24.958945099999998,
+      "rating": 4.4,
+      "ratingCount": 1742,
+      "priceLevel": "€€",
+      "type": "Finnish restaurant",
+      "types": [
+        "Finnish restaurant"
+      ],
+      "website": "https://kolmekruunua.fi/",
+      "phoneNumber": "09 1354172",
+      "openingHours": {
+        "Tuesday": "4 pm–1 am",
+        "Wednesday": "4 pm–1 am",
+        "Thursday": "4 pm–1 am",
+        "Friday": "4 pm–1:30 am",
+        "Saturday": "12 pm–1:30 am",
+        "Sunday": "12 pm–1 am",
+        "Monday": "4 pm–1 am"
+      },
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrRPMlRFnqlfpPuWxz4oEufXCMLNRPqjpfVsFqM_WGnnA5J2cVcHd6gVYngV7tFP0id2KwAxOF28iQZpVCo2NSoCw3P8ap-41zFG77OVwEOI0gI1q37iUOn7qGRy51UyKaA_F_cEg",
+      "cid": "936907403113703488",
+      "fid": "0x46920bd0ef75fcd1:0xd009051b606a840",
+      "placeId": "ChIJ0fx179ALkkYRQKgGtlGQAA0"
+    },
+    {
+      "position": 8,
+      "title": "Restaurant Natura",
+      "address": "Iso Roobertinkatu 11, 00120 Helsinki",
+      "latitude": 60.1636301,
+      "longitude": 24.942363099999998,
+      "rating": 4.6,
+      "ratingCount": 561,
+      "priceLevel": "€50+",
+      "type": "Scandinavian restaurant",
+      "types": [
+        "Scandinavian restaurant",
+        "Finnish restaurant",
+        "Organic restaurant"
+      ],
+      "website": "http://www.restaurantnatura.com/",
+      "phoneNumber": "040 6891111",
+      "description": "A carefully sourced fixed-price menu is offered with wine & cocktails at this sharp restaurant.",
+      "openingHours": {
+        "Wednesday": "5 pm–12 am",
+        "Thursday": "5 pm–12 am",
+        "Friday": "5 pm–12 am",
+        "Saturday": "5 pm–12 am",
+        "Sunday": "5 pm–12 am",
+        "Monday": "Closed",
+        "Tuesday": "Closed"
+      },
+      "bookingLinks": [
+        "https://v2.tableonline.fi/instabook/bookings/606/ezxFS6z",
+        "https://www.google.com/maps/reserve/v/dine/c/5ym6JC0WP1Y?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipM9umb5JNOO3e_uF_x4qQ0nS0a7m6rSYeirQo4v",
+      "cid": "17082432386281829067",
+      "fid": "0x46920bc9912030a7:0xed10fdbfabf4f2cb",
+      "placeId": "ChIJpzAgkckLkkYRy_L0q7_9EO0"
+    },
+    {
+      "position": 9,
+      "title": "Restaurant Konstan Möljä",
+      "address": "Hietalahdenkatu 14, 00180 Helsinki",
+      "latitude": 60.1639853,
+      "longitude": 24.926793,
+      "rating": 4.5,
+      "ratingCount": 1793,
+      "type": "Finnish restaurant",
+      "types": [
+        "Finnish restaurant"
+      ],
+      "website": "http://www.konstanmolja.fi/",
+      "phoneNumber": "09 6947504",
+      "openingHours": {
+        "Wednesday": "11 am–2:30 pm, 5–10 pm",
+        "Thursday": "11 am–2:30 pm, 5–10 pm",
+        "Friday": "11 am–2:30 pm, 4–11 pm",
+        "Saturday": "4–11 pm",
+        "Sunday": "Closed",
+        "Monday": "Closed",
+        "Tuesday": "11 am–2:30 pm, 5–10 pm"
+      },
+      "bookingLinks": [
+        "http://www.konstanmolja.fi/varaukset-reservations",
+        "https://www.quandoo.fi/place/konstan-molja-86945?aid=63&rwg_token=ACgRB3daiAn3RIHpWACHo_ffhjPjXAt6sQ6KIKcbTSw7WDr5jmY59KflLx6FlPl5pGPQK_WIn3n9we-VSIuIHjLjxetoesUNHA%3D%3D",
+        "https://www.google.com/maps/reserve/v/dine/c/egg_u5FVhrQ?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4noyt0bmU8q8nFpAPG2blNx2auvUWjtsLfO61ZszT9luHIYnNYKSfgJikF3QJFf3pEVefnps3PRJKv7z2pfhkGCiKJnbBFsKJJER3D94kGpecCrZ9_1C3ChRDfbqZCmwGCyvK_qU",
+      "cid": "17513757630512782308",
+      "fid": "0x46920a4aa5c47f97:0xf30d5dc5e9005be4",
+      "placeId": "ChIJl3_EpUoKkkYR5FsA6cVdDfM"
+    },
+    {
+      "position": 10,
+      "title": "Rioni",
+      "address": "Kasarmikatu 25, 00130 Helsinki",
+      "latitude": 60.166572499999994,
+      "longitude": 24.948053299999998,
+      "rating": 4.6,
+      "ratingCount": 1374,
+      "priceLevel": "€€",
+      "type": "Georgian restaurant",
+      "types": [
+        "Georgian restaurant"
+      ],
+      "website": "http://www.rioni.fi/",
+      "phoneNumber": "050 5512264",
+      "openingHours": {
+        "Wednesday": "4–11 pm",
+        "Thursday": "4–11 pm",
+        "Friday": "4 pm–12 am",
+        "Saturday": "1 pm–12 am",
+        "Sunday": "1–10 pm",
+        "Monday": "4–11 pm",
+        "Tuesday": "4–11 pm"
+      },
+      "bookingLinks": [
+        "https://www.quandoo.fi/place/rioni-helsinki-93704?aid=63&rwg_token=ACgRB3dDWieij23PKsM74Zs5CDmuPDLFkjQUWNVeHSxYgVMwIqDyPWw5mYUiQ5RVkkug2ZoEPdxCMje3wv0xhkCne1M7MnnR1Lfgav_JjFJ7mYZiAAe3nAs%3D",
+        "https://www.google.com/maps/reserve/v/dine/c/zyXDuqUuyPg?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipMxxl8v9VDWgoOLXk5a63an0gVx347jbrze-D9i",
+      "cid": "7448665967355946308",
+      "fid": "0x46920baeebd7ab11:0x675efa3b8acae544",
+      "placeId": "ChIJEavX664LkkYRROXKijv6Xmc"
+    },
+    {
+      "position": 11,
+      "title": "Restaurant Passio",
+      "address": "Kalevankatu 13, 00100 Helsinki",
+      "latitude": 60.167136899999996,
+      "longitude": 24.937016,
+      "rating": 4.5,
+      "ratingCount": 725,
+      "priceLevel": "€50+",
+      "type": "Restaurant",
+      "types": [
+        "Restaurant"
+      ],
+      "website": "http://www.passiodining.fi/",
+      "phoneNumber": "020 7352040",
+      "description": "Innovative restaurant serving tasting menus & wine pairings amid retro-chic surroundings.",
+      "openingHours": {
+        "Wednesday": "5 pm–12 am",
+        "Thursday": "5 pm–12 am",
+        "Friday": "4 pm–12 am",
+        "Saturday": "4 pm–12 am",
+        "Sunday": "4 pm–12 am",
+        "Monday": "5 pm–12 am",
+        "Tuesday": "5 pm–12 am"
+      },
+      "bookingLinks": [
+        "https://www.quandoo.fi/place/passio-keittio-ja-baari-59147?aid=63&rwg_token=ACgRB3fIO8d_KaJ72DYsAxmm5XxMx_hTZLuCiGZfNDR1Dl-UMlJMnIX82KBT_f1SzyQf8jZUtX36Zv5sUmOItHSTsPmyC3r6Wg%3D%3D",
+        "https://www.google.com/maps/reserve/v/dine/c/Fe1bss5uIS4?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/p/AF1QipNVSGUEyjNpj1SZHZVsNG0wHGgxmk7PwqCxIFnC",
+      "cid": "16922693247156257618",
+      "fid": "0x46920bcb0ca22ab1:0xead97bd917a68352",
+      "placeId": "ChIJsSqiDMsLkkYRUoOmF9l72eo"
+    },
+    {
+      "position": 12,
+      "title": "Spis",
+      "address": "Kasarmikatu 26, 00130 Helsinki",
+      "latitude": 60.163599999999995,
+      "longitude": 24.9479109,
+      "rating": 4.8,
+      "ratingCount": 281,
+      "priceLevel": "€50+",
+      "type": "Scandinavian restaurant",
+      "types": [
+        "Scandinavian restaurant"
+      ],
+      "website": "http://spis.fi/",
+      "phoneNumber": "045 3051211",
+      "description": "Informal, brick-lined eatery with a set menu featuring creative local dishes & desserts, plus wine.",
+      "openingHours": {
+        "Wednesday": "6 pm–12 am",
+        "Thursday": "6 pm–12 am",
+        "Friday": "6 pm–12 am",
+        "Saturday": "6 pm–12 am",
+        "Sunday": "Closed",
+        "Monday": "Closed",
+        "Tuesday": "6 pm–12 am"
+      },
+      "bookingLinks": [
+        "https://www.google.com/maps/reserve/v/dine/c/ZCv4m9vSqwg?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nom4Lu3QRJNxR7dSfiqOIGfelM4Fsd_F6xaWufEVj0f_dS5UuAEDwGJBBWKpYB8mDaPx-yo_QKR8Fb_3Jp37TX8eKDRLL2iQHW9u98w5P0CsZfCo0lQQl17Pq3OVSlFwnzY_m4WIw",
+      "cid": "16960941518972326452",
+      "fid": "0x46920bc8f43a5f61:0xeb615e72d6851234",
+      "placeId": "ChIJYV869MgLkkYRNBKF1nJeYes"
+    },
+    {
+      "position": 13,
+      "title": "Ravintola Marani Oulu",
+      "address": "Pakkahuoneenkatu 8 lh. 51, 90100 Oulu",
+      "latitude": 65.013306,
+      "longitude": 25.468584,
+      "rating": 4.8,
+      "ratingCount": 345,
+      "type": "Restaurant",
+      "types": [
+        "Restaurant",
+        "Georgian restaurant",
+        "Wine bar"
+      ],
+      "website": "http://www.marani.fi/",
+      "phoneNumber": "050 5174088",
+      "openingHours": {
+        "Wednesday": "4–10 pm",
+        "Thursday": "4–10 pm",
+        "Friday": "4–11 pm",
+        "Saturday": "1–11 pm",
+        "Sunday": "1–9 pm",
+        "Monday": "4–10 pm",
+        "Tuesday": "Closed"
+      },
+      "bookingLinks": [
+        "https://www.quandoo.fi/place/ravintola-marani-99658?aid=63&rwg_token=ACgRB3cMpDMRPoEps1LH-3jdBtw-LWsHYLDDyYTEpw-WozZfVCaU5DNdC4dAIXU4KxNu0fZdNSdmAcQw973kyCapOFZW0FnHfJBeiRcDQkPSSZ-oI4daEQU%3D",
+        "https://www.google.com/maps/reserve/v/dine/c/jwlboalxHKw?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nojGxtTCmgvvEH1YYFoSCC4men6jmF_MGU8wRkCI31heo__K8mccsbjpJNkWIvzXDj8-7Q_yeZR3aLBb-LEgWRiscyHKezs6z2gs1reD0U4LniSIxJocddWNXPQGFx8hkjW9aWr",
+      "cid": "8120237868859279876",
+      "fid": "0x4680332f81c99601:0x70b0e151a1084a04",
+      "placeId": "ChIJAZbJgS8zgEYRBEoIoVHhsHA"
+    },
+    {
+      "position": 14,
+      "title": "Uleåborg 1881",
+      "address": "Aittatori 4-5, 90100 Oulu",
+      "latitude": 65.01343419999999,
+      "longitude": 25.4627664,
+      "rating": 4.7,
+      "ratingCount": 363,
+      "priceLevel": "€50+",
+      "type": "French restaurant",
+      "types": [
+        "French restaurant"
+      ],
+      "website": "http://www.uleaborg.fi/",
+      "phoneNumber": "08 8811188",
+      "description": "Refined seafood & meat plates served in a warm restaurant set in a historic warehouse.",
+      "openingHours": {
+        "Wednesday": "5–11 pm",
+        "Thursday": "5–11 pm",
+        "Friday": "5–11 pm",
+        "Saturday": "5–11 pm",
+        "Sunday": "Closed",
+        "Monday": "Closed",
+        "Tuesday": "5–11 pm"
+      },
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqVVpbP0PJDFlkgS8qfKlDkF7FZkvOE2dsj-Md17ahgdcuLyIatsVhrTBuOUBvKgUPyD3Dwysk1-_sD1xcicgPqaBnyYOEZP1oWlH9wZUQhZeJXliFt-aIqc55JwUU60_ujqCkS_Q",
+      "cid": "9207485405993206840",
+      "fid": "0x468032a5a9ceb9b3:0x7fc78f3182d18438",
+      "placeId": "ChIJs7nOqaUygEYROITRgjGPx38"
+    },
+    {
+      "position": 15,
+      "title": "Ravintola Kannas",
+      "address": "Eerikinkatu 43, 00180 Helsinki",
+      "latitude": 60.1635961,
+      "longitude": 24.9247984,
+      "rating": 4.4,
+      "ratingCount": 1943,
+      "priceLevel": "€€",
+      "type": "Finnish restaurant",
+      "types": [
+        "Finnish restaurant"
+      ],
+      "website": "http://www.kannas.fi/",
+      "phoneNumber": "09 6944780",
+      "openingHours": {
+        "Wednesday": "4 pm–12 am",
+        "Thursday": "4 pm–12 am",
+        "Friday": "4 pm–12 am",
+        "Saturday": "2 pm–12 am",
+        "Sunday": "2 pm–12 am",
+        "Monday": "4 pm–12 am",
+        "Tuesday": "4 pm–12 am"
+      },
+      "bookingLinks": [
+        "https://www.google.com/maps/reserve/v/dine/c/OFEhSYwvcKU?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nry0YNUF8UmkyXhPwrxCG5FF1i-vGkU7NiUtG5KTqjOq4ebvsvx0i0g0OchdeVluKXFB8cU0i90dtp56EfT9In5tmDpw4d8umktusWkgAKFgzI1oy6hslLgnxF9-Ma7qnPjxwBn",
+      "cid": "1257595965431806041",
+      "fid": "0x46920a4a9671314d:0x1173e0de1686f859",
+      "placeId": "ChIJTTFxlkoKkkYRWfiGFt7gcxE"
+    },
+    {
+      "position": 16,
+      "title": "Street Canteen",
+      "address": "Mannerheimintie 3, 00100 Helsinki",
+      "latitude": 60.168934199999995,
+      "longitude": 24.941329,
+      "rating": 4.8,
+      "ratingCount": 375,
+      "priceLevel": "€15–20",
+      "type": "Malaysian restaurant",
+      "types": [
+        "Malaysian restaurant"
+      ],
+      "website": "http://www.streetcanteen.fi/",
+      "phoneNumber": "040 1875911",
+      "openingHours": {
+        "Wednesday": "11 am–9 pm",
+        "Thursday": "11 am–9 pm",
+        "Friday": "11 am–10 pm",
+        "Saturday": "12–10 pm",
+        "Sunday": "Closed",
+        "Monday": "11 am–9 pm",
+        "Tuesday": "11 am–9 pm"
+      },
+      "bookingLinks": [
+        "https://www.tableonline.fi/fi/helsinki/street-canteen/1250"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrgECsajjENWtQpgHIvPM4HVl7A5X-iPsy0e_iLUHOxnl41x6Yf4_DO-vtFPwM6OL0aC2xjSko7oRwodynB2eUBVk0IyqB6ioxCRg1VNm9ElCCB4XHr1yUSX8ho_ZuGkowEsnzK",
+      "cid": "3169829926643589521",
+      "fid": "0x469209d102d1cbdd:0x2bfd7f8617fe6191",
+      "placeId": "ChIJ3cvRAtEJkkYRkWH-F4Z__Ss"
+    },
+    {
+      "position": 17,
+      "title": "Ravintola Palace",
+      "address": "Eteläranta 10, 00130 Helsinki",
+      "latitude": 60.165219,
+      "longitude": 24.952263199999997,
+      "rating": 4.7,
+      "ratingCount": 321,
+      "priceLevel": "€50+",
+      "type": "Restaurant",
+      "types": [
+        "Restaurant",
+        "Fine dining restaurant"
+      ],
+      "website": "http://www.palacerestaurant.fi/",
+      "phoneNumber": "050 5020718",
+      "openingHours": {
+        "Wednesday": "6 pm–12 am",
+        "Thursday": "6 pm–12 am",
+        "Friday": "6 pm–12 am",
+        "Saturday": "6 pm–12 am",
+        "Sunday": "Closed",
+        "Monday": "Closed",
+        "Tuesday": "Closed"
+      },
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrYcgEmAL2D_aBv8D_Pokneqa7dnHJqpDKaJfcqzX6nilSQEl3b5NAZqx1WUbEq0LU7T8bXS6rpewOAF8DIDlyC9C6OJ0QKCmDtkGlcmxu-MyQpGXQNTToVM3LgGIUlnHtqRLxE",
+      "cid": "11298198641253463749",
+      "fid": "0x46920bc8ac23d2a5:0x9ccb43cdc5b6b6c5",
+      "placeId": "ChIJpdIjrMgLkkYRxba2xc1Dy5w"
+    },
+    {
+      "position": 18,
+      "title": "Restaurant Gran Delicato",
+      "address": "Kalevankatu 34, Albertinkatu 31, 00180 Helsinki",
+      "latitude": 60.165127899999995,
+      "longitude": 24.932313,
+      "rating": 4.7,
+      "ratingCount": 1114,
+      "priceLevel": "€50+",
+      "type": "Greek restaurant",
+      "types": [
+        "Greek restaurant",
+        "Cafe",
+        "Coffee shop",
+        "Restaurant"
+      ],
+      "website": "https://www.facebook.com/grandelicato/",
+      "phoneNumber": "050 5135007",
+      "description": "Cozy, brick-walled restaurant providing traditional Greek small plates & entrees, plus wines & ouzo.",
+      "openingHours": {
+        "Wednesday": "7:30 am–10 pm",
+        "Thursday": "7:30 am–10 pm",
+        "Friday": "7:30 am–10 pm",
+        "Saturday": "10 am–10 pm",
+        "Sunday": "10 am–6 pm",
+        "Monday": "7:30 am–8 pm",
+        "Tuesday": "7:30 am–8 pm"
+      },
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrcOljHv2zZ_lMhJDGQgzXs4VtOwW03ns0MTeqnpTLxww34SntmyG3UM2wOsvLW-MDwxGfkjeiOhedbQmFzrDSwLRCXuPp9kIz1FH5FTKJPNT7CUKUjNXr4ti03VQOmL0KG7YC5mg",
+      "cid": "16335682579465574539",
+      "fid": "0x46920bcac3dbc7ff:0xe2b400c18095188b",
+      "placeId": "ChIJ_8fbw8oLkkYRixiVgMEAtOI"
+    },
+    {
+      "position": 19,
+      "title": "Restaurant Merimakasiini",
+      "address": "Hietalahdenranta 14, 00180 Helsinki",
+      "latitude": 60.1608898,
+      "longitude": 24.9267768,
+      "rating": 4.4,
+      "ratingCount": 1371,
+      "priceLevel": "€€",
+      "type": "Seafood restaurant",
+      "types": [
+        "Seafood restaurant"
+      ],
+      "website": "http://www.merimakasiini.fi/",
+      "phoneNumber": "050 5355425",
+      "description": "Seasonal seafood & a take-out option offered in a casual restaurant with a waterfront terrace.",
+      "openingHours": {
+        "Wednesday": "11:30 am–10 pm",
+        "Thursday": "11:30 am–10 pm",
+        "Friday": "11:30 am–10 pm",
+        "Saturday": "1–10 pm",
+        "Sunday": "1–9 pm",
+        "Monday": "11:30 am–10 pm",
+        "Tuesday": "11:30 am–10 pm"
+      },
+      "bookingLinks": [
+        "https://www.google.com/maps/reserve/v/dine/c/AMy39z0ZJyo?source=pa&opi=79508299"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqzir2njUB3KS1fPspWEFjOJxK6i0Xrkf3g1d2YICvGhwf6Hval2EH2Hx4qBjKoZmFEk5gt5raW9zZ934ycivbN9N_-_yp5aw6QvYNU1lOGIScNi-eVJyRHm3Zv-CQLvP0RoEthNQ",
+      "cid": "17618594001233252027",
+      "fid": "0x46920bb4da0e3389:0xf481d1e595560ebb",
+      "placeId": "ChIJiTMO2rQLkkYRuw5WleXRgfQ"
+    },
+    {
+      "position": 20,
+      "title": "Restaurant HOKU",
+      "address": "Urho Kekkosen katu 1, 00100 Helsinki",
+      "latitude": 60.169655399999996,
+      "longitude": 24.9338707,
+      "rating": 4.6,
+      "ratingCount": 1350,
+      "priceLevel": "€€",
+      "type": "Asian restaurant",
+      "types": [
+        "Asian restaurant",
+        "Hawaiian restaurant",
+        "Japanese restaurant"
+      ],
+      "website": "http://www.hoku.fi/",
+      "phoneNumber": "040 1646160",
+      "description": "Upscale Asian-Hawaiian cuisine served in a chic, light-filled interior overlooking the city.",
+      "openingHours": {
+        "Wednesday": "11 am–3 pm, 5–9 pm",
+        "Thursday": "11 am–3 pm, 5–9 pm",
+        "Friday": "11 am–3 pm, 5–10 pm",
+        "Saturday": "11 am–3 pm, 5–10 pm",
+        "Sunday": "Closed",
+        "Monday": "11 am–3 pm, 5–9 pm",
+        "Tuesday": "11 am–3 pm, 5–9 pm"
+      },
+      "bookingLinks": [
+        "https://www.hoku.fi/reservations"
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4nr9HHODiBLHo6YdFKi_hIDNvlhZR8XD3RkfFpY2NHWqZ1HHuPETxQJGazK30dPhL3YHH3WWyOGlhQvVqnnNOPs2mEGil95fk-SyPIqIsw6gjhfHuHXzTCE367XpWMsAcvwdsHxMlQ",
+      "cid": "8533946606792608910",
+      "fid": "0x46920bb655555555:0x766eab395e060c8e",
+      "placeId": "ChIJVVVVVbYLkkYRjgwGXjmrbnY"
+    }
+  ],
+  "credits": 3
+}
