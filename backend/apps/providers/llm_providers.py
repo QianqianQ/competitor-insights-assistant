@@ -49,52 +49,17 @@ class OpenAIProvider:
         self,
         user_business_data: Dict[str, Any],
         competitor_data: List[Dict[str, Any]],
+        report_style: str = "casual",
         **kwargs,
     ) -> LLMResponse:
         """Generate analysis with JSON response parsing."""
         try:
-            # Real OpenAI API implementation
-            system_prompt = self._build_system_prompt()
+            system_prompt = self._build_system_prompt(report_style)
             user_prompt = self._build_comparison_prompt(
-                user_business_data, competitor_data
+                user_business_data, competitor_data, report_style
             )
 
-            response_format = {
-                "type": "json_schema",
-                "json_schema": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "analysis": {
-                                "type": "object",
-                                "properties": {
-                                    "overview": {"type": "string"},
-                                    "strengths": {
-                                        "type": "array",
-                                        "items": {"type": "string"}
-                                    },
-                                    "weaknesses": {
-                                        "type": "array",
-                                        "items": {"type": "string"}
-                                    },
-                                    "competitive_position": {"type": "string"}
-                                },
-                                "required": [
-                                    "overview",
-                                    "strengths",
-                                    "weaknesses",
-                                    "competitive_position"
-                                ]
-                            },
-                            "suggestions": {
-                                "type": "array",
-                                "items": {"type": "string"}
-                            }
-                        },
-                        "required": ["analysis", "suggestions"]
-                    }
-                }
-            }
+            response_format = self._get_response_format()
 
             response = await self.client.chat.completions.create(
                 model=self.model,
@@ -102,8 +67,8 @@ class OpenAIProvider:
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
-                temperature=0.7,
                 response_format=response_format,
+                temperature=0.7,
                 max_tokens=300,
             )
 
@@ -158,43 +123,63 @@ class OpenAIProvider:
             )
             raise LLMServiceError(self.provider_name, str(e))
 
-    def _build_system_prompt(self) -> str:
+    #########################################################
+    # Build prompts and response format
+    #########################################################
+
+    def _build_system_prompt(self, report_style: str = "casual") -> str:
         """Build system prompt for JSON-formatted analysis."""
-        return """
+
+        style_instruction = (
+            "Make analysis and suggestions data-driven " +
+            "with specific metrics and percentages"
+            if report_style == "data-driven"
+            else "Make analysis and suggestions friendly and easy to understand"
+        )
+
+        return f"""
         You are an expert business analyst specializing in competitive analysis.
         Provide your analysis in strict JSON format with these required keys:
-        {
-            "analysis": {
+        {{
+            "analysis": {{
                 "overview": "competitive landscape summary",
                 "strengths": ["list", "of", "strengths"],
                 "weaknesses": ["list", "of", "weaknesses"],
                 "competitive_position": "summary text"
-            },
+            }},
             "suggestions": ["list", "of", "actionable", "suggestions"]
-        }
+        }}
 
         Requirements:
-        - Respond ONLY with valid JSON.
-        Ensure the output is valid JSON with all strings terminated and objects closed.
+        - {style_instruction}
         - Include exactly 3-5 suggestions
-        - Keep analysis data-driven and specific
+        - Respond ONLY with valid JSON
         - Do not include any text outside the JSON structure
         """.strip()
 
     def _build_comparison_prompt(
-        self, user_business_data: Dict[str, Any], competitor_data: List[Dict[str, Any]]
+        self,
+        user_business_data: Dict[str, Any],
+        competitor_data: List[Dict[str, Any]],
+        report_style: str = "casual",
     ) -> str:
         """Build prompt for JSON-formatted analysis."""
+
+        style_note = (
+            "Focus on metrics, percentages, and data-driven insights"
+            if report_style == "data-driven"
+            else "Use friendly, accessible language"
+        )
 
         prompt = f"""
         Analyze this competitive data and return JSON with:
         1. Analysis of competitive landscape
         2. Key strengths/weaknesses
         3. Competitive position assessment
-        4. 3-5 specific suggestions
+        4. 3-5 specific suggestions ({style_note})
 
         Data:
-        - Your Business: {user_business_data}
+        - My Business: {user_business_data}
         - Competitors: {competitor_data}
 
         Respond ONLY with valid JSON matching the specified format.
@@ -202,6 +187,87 @@ class OpenAIProvider:
         """.strip()
 
         return prompt
+
+    def _get_response_format(self) -> Dict[str, Any]:
+        """Response format for JSON-formatted analysis."""
+        return {
+            "type": "json_schema",
+            "json_schema": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "analysis": {
+                            "type": "object",
+                            "properties": {
+                                "overview": {"type": "string"},
+                                "strengths": {
+                                    "type": "array",
+                                    "items": {"type": "string"}
+                                },
+                                "weaknesses": {
+                                    "type": "array",
+                                    "items": {"type": "string"}
+                                },
+                                "competitive_position": {"type": "string"}
+                            },
+                            "required": [
+                                "overview",
+                                "strengths",
+                                "weaknesses",
+                                "competitive_position"
+                            ]
+                        },
+                        "suggestions": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        }
+                    },
+                    "required": ["analysis", "suggestions"]
+                }
+            }
+        }
+
+    #########################################################
+    # Fallback methods
+    #########################################################
+
+    def _genereate_fallback_response(
+        self,
+        user_business_data: Dict[str, Any],
+        competitor_data: List[Dict[str, Any]]
+    ) -> LLMResponse:
+        """Generate mock JSON response for development."""
+        import json
+
+        user_name = user_business_data.get("name", "Your Business")
+        competitor_count = len(competitor_data)
+
+        mock_response = {
+            "analysis": {
+                "overview": f"{user_name} competes with " +
+                f"{competitor_count} similar businesses in the area",
+                "strengths": [
+                    "Strong customer review ratings",
+                    "Complete business profile information"
+                ],
+                "weaknesses": [
+                    "Fewer reviews than competitors",
+                    "Limited business photos"
+                ],
+                "competitive_position": "Middle-tier competitive position with room for improvement"
+            },
+            "suggestions": self._generate_fallback_recommendations(
+                user_business_data, competitor_data)
+        }
+
+        return LLMResponse(
+            content=json.dumps(mock_response["analysis"]),
+            suggestions=mock_response["suggestions"],
+            tokens_used=350,
+            model=self.model,
+            provider=self.provider_name,
+            metadata={"mock": True, "format": "json"}
+        )
 
     def _generate_fallback_recommendations(
         self, user_data: Dict[str, Any], competitor_data: List[Dict[str, Any]]
@@ -232,39 +298,69 @@ class OpenAIProvider:
 
         return recommendations
 
-    def _genereate_fallback_response(
+    #########################################################
+    # For local development
+    #########################################################
+
+    def generate_comparison_analysis_test(
         self,
         user_business_data: Dict[str, Any],
-        competitor_data: List[Dict[str, Any]]
+        competitor_data: List[Dict[str, Any]],
+        report_style: str = "casual",
+        **kwargs
     ) -> LLMResponse:
-        """Generate mock JSON response for development."""
-        import json
-
-        user_name = user_business_data.get("name", "Your Business")
-        competitor_count = len(competitor_data)
-
-        mock_response = {
-            "analysis": {
-                "overview": f"{user_name} competes with {competitor_count} similar businesses in the area",
-                "strengths": [
-                    "Strong customer review ratings",
-                    "Complete business profile information"
-                ],
-                "weaknesses": [
-                    "Fewer reviews than competitors",
-                    "Limited business photos"
-                ],
-                "competitive_position": "Middle-tier competitive position with room for improvement"
+        """Generate analysis with JSON response parsing."""
+        response = {
+            "user_business": {
+                "name": "Restaurant Everest Katajanokka",
+                "website": "http://everestnokka.fi/",
+                "address": "Luotsikatu 12 A, 00160 Helsinki",
+                "rating": 4.6,
+                "rating_count": 980,
+                "image_count": 12,
+                "category": "Restaurant",
+                "has_hours": True,
+                "has_description": False,
+                "has_menu_link": True,
+                "has_price_level": True,
+                "latitude": 60.1678712,
+                "longitude": 24.966352399999998
             },
-            "suggestions": self._generate_fallback_recommendations(
-                user_business_data, competitor_data)
+            "competitor_count": 20,
+            "ai_comparison_summary": "{\"overview\": \"The competitive landscape in Helsinki is highly competitive with several restaurants achieving high ratings and customer reviews. Key factors influencing success include high-quality food, customer service, and a unique dining atmosphere.\", \"strengths\": [\"Highly rated with a strong customer base\", \"Presence of essential business features like menu links and price levels\", \"Located in a prime area with potential for local and tourist traffic\"], \"weaknesses\": [\"Lack of descriptive content on the website\", \"Potential for improving customer engagement through social media or additional services\"], \"competitive_position\": \"Restaurant Everest Katajanokka is well-positioned in the market with a strong rating and customer base, but it faces intense competition from other highly-rated establishments.\"}",
+            "ai_improvement_suggestions": self._get_styled_suggestions_test(
+                report_style
+            ),
+            "metadata": {
+                "llm_provider": "perplexity",
+                "llm_model": "sonar",
+                "tokens_used": 2948
+            }
         }
-
         return LLMResponse(
-            content=json.dumps(mock_response["analysis"]),
-            suggestions=mock_response["suggestions"],
-            tokens_used=350,
-            model=self.model,
-            provider=self.provider_name,
-            metadata={"mock": True, "format": "json"}
-        )
+                    content=response["ai_comparison_summary"],
+                    suggestions=response["ai_improvement_suggestions"],
+                    tokens_used=response["metadata"]["tokens_used"],
+                    model=self.model,
+                    provider=self.provider_name,
+                    metadata=response["metadata"],
+                )
+
+    def _get_styled_suggestions_test(self, suggestion_style: str) -> List[str]:
+        """Get suggestions based on the selected style."""
+        if suggestion_style == "data-driven":
+            return [
+                "Increase review count by 25% through targeted customer follow-up campaigns",
+                "Benchmark against competitors averaging 4.8 rating to identify improvement areas",
+                "Add business description to improve conversion rates by 15-20%",
+                "Optimize for image count (current: 12, competitor average: 18) to boost engagement",
+                "Implement pricing transparency to match 85% of successful competitors"
+            ]
+        else:  # casual style
+            return [
+                "Add a compelling business description to help customers understand what makes you special",
+                "Engage with customers more to boost your review count and ratings",
+                "Share more photos of your food and restaurant atmosphere online",
+                "Make your hours and pricing clear so customers know what to expect",
+                "Consider joining local restaurant events to increase your visibility"
+            ]

@@ -71,10 +71,14 @@ class ComparisonViewSet(viewsets.ModelViewSet):
             user_business_identifier = serializer.validated_data[
                 "user_business_identifier"
             ]
+            report_style = serializer.validated_data.get(
+                "report_style", "casual"
+            )
 
             logger.info(
                 "comparison_creation_started",
                 user_business_identifier=user_business_identifier,
+                report_style=report_style,
             )
 
             # Initialize comparison service
@@ -82,7 +86,8 @@ class ComparisonViewSet(viewsets.ModelViewSet):
 
             # Create comparison report
             report = comparison_service.create_comparison(
-                user_business_identifier=user_business_identifier
+                user_business_identifier=user_business_identifier,
+                report_style=report_style,
             )
 
             logger.info(
@@ -100,7 +105,9 @@ class ComparisonViewSet(viewsets.ModelViewSet):
             )
         except Exception as e:
             logger.exception(
-                "comparison_unexpected_error", error=str(e), error_type=type(e).__name__
+                "comparison_unexpected_error",
+                error=str(e),
+                error_type=type(e).__name__,
             )
             return Response(
                 {"error": "Unexpected error occurred"},

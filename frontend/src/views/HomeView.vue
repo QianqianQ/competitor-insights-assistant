@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import BusinessSearchForm from '../components/business/BusinessSearchForm.vue'
 import FeatureCard from '../components/FeatureCard.vue'
 

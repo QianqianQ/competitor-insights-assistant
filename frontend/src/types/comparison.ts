@@ -40,6 +40,7 @@ export interface ComparisonReportData {
 
 export interface ComparisonRequestPayload {
   user_business_identifier: string;
+  report_style?: 'casual' | 'data-driven';
 }
 
 // For the Pinia store state

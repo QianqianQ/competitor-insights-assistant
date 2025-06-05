@@ -7,7 +7,7 @@ and generating AI-powered insights and recommendations.
 
 import asyncio
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from config.settings.base import PERPELEXITY_AI_API_KEY
 
 from apps.businesses.models import BusinessProfileData
@@ -52,13 +52,18 @@ class ComparisonService:
         )
 
     def create_comparison(
-        self, user_business_identifier: str, max_competitors: int = 10, **kwargs
+        self,
+        user_business_identifier: str,
+        report_style: str = "casual",
+        max_competitors: int = 10,
+        **kwargs
     ) -> ComparisonReport:
         """
         Create a complete business comparison report.
 
         Args:
             user_business_identifier: User's business name or identifier
+            report_style: Style for report ('casual' or 'data-driven')
             max_competitors: Maximum number of competitors to find
             **kwargs: Additional parameters for customization
 
@@ -73,6 +78,7 @@ class ComparisonService:
             "comparison_started",
             user_business=user_business_identifier,
             max_competitors=max_competitors,
+            report_style=report_style,
         )
 
         # Validate inputs
@@ -98,7 +104,14 @@ class ComparisonService:
             llm_response = asyncio.run(self.llm_provider.generate_comparison_analysis(
                 user_business_data=comparison_data["user_business"],
                 competitor_data=comparison_data["competitors"],
+                report_style=report_style,
             ))
+            # For local development
+            # llm_response = self.llm_provider.generate_comparison_analysis_test(
+            #     user_business_data=comparison_data["user_business"],
+            #     competitor_data=comparison_data["competitors"],
+            #     report_style=report_style,
+            # )
 
             # Create and save comparison report
             report = ComparisonReport(
@@ -133,52 +146,9 @@ class ComparisonService:
             )
             raise
 
-    def search_businesses(
-        self, query: str, location: Optional[str] = None, limit: int = 10
-    ) -> List[Dict[str, Any]]:
-        """
-        Search for businesses using the data provider.
-
-        Args:
-            query: Search term
-            location: Optional location filter
-            limit: Maximum number of results
-
-        Returns:
-            List of business search results
-        """
-        logger.info("business_search", query=query, location=location, limit=limit)
-
-        try:
-            # Run async method in sync context
-            results = asyncio.run(
-                self.data_provider.search_competitors_data(
-                    query=query, location=location, limit=limit
-                )
-            )
-
-            return [
-                {
-                    "name": result.name,
-                    "address": result.address,
-                    "website": result.website,
-                    "rating": result.rating,
-                    "rating_count": result.rating_count,
-                    "image_count": result.image_count,
-                    "has_hours": result.has_hours,
-                    "has_description": result.has_description,
-                    "has_menu_link": result.has_menu_link,
-                    "has_price_level": result.has_price_level,
-                }
-                for result in results
-            ]
-        except Exception as e:
-            logger.error("business_search_failed", query=query, error=str(e))
-            raise
-
     def _validate_comparison_inputs(self, user_business_identifier: str) -> None:
         """Validate comparison inputs."""
-        if not user_business_identifier or not user_business_identifier.strip():
+        if not user_business_identifier.strip():
             raise ValidationError("User business identifier is required")
 
     def _fetch_business(
@@ -229,31 +199,6 @@ class ComparisonService:
                 business_name=identifier,
             )
 
-    def _prepare_comparison_data(
-        self,
-        user_business: BusinessProfileData,
-        competitor_businesses: List[BusinessProfileData],
-    ) -> Dict[str, Any]:
-        """
-        Prepare structured data for LLM analysis.
-
-        Args:
-            user_business: User's business profile
-            competitor_businesses: List of competitor profiles
-
-        Returns:
-            Structured comparison data
-        """
-        user_data = user_business.to_dict()
-
-        competitor_data = [c.to_dict() for c in competitor_businesses]
-
-        return {
-            "user_business": user_data,
-            "competitors": competitor_data,
-            "comparison_metadata": {"competitor_count": len(competitor_businesses)},
-        }
-
     def _find_competitors(
         self, user_business: BusinessProfileData, max_competitors: int = 3
     ) -> List[BusinessProfileData]:
@@ -287,6 +232,7 @@ class ComparisonService:
             )
 
         return competitor_businesses
+
         # Create search query based on business type or name
         # search_query = (
         #     user_business.type if user_business.type else user_business.name
@@ -367,3 +313,28 @@ class ComparisonService:
         #     )
         #     # Return empty list if competitor search fails
         #     return []
+
+    def _prepare_comparison_data(
+        self,
+        user_business: BusinessProfileData,
+        competitor_businesses: List[BusinessProfileData],
+    ) -> Dict[str, Any]:
+        """
+        Prepare structured data for LLM analysis.
+
+        Args:
+            user_business: User's business profile
+            competitor_businesses: List of competitor profiles
+
+        Returns:
+            Structured comparison data
+        """
+        user_data = user_business.to_dict()
+
+        competitor_data = [c.to_dict() for c in competitor_businesses]
+
+        return {
+            "user_business": user_data,
+            "competitors": competitor_data,
+            "comparison_metadata": {"competitor_count": len(competitor_businesses)},
+        }

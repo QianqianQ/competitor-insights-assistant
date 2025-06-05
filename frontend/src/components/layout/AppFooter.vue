@@ -4,7 +4,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="mb-4 md:mb-0">
             <p class="text-gray-500 text-sm">
-              © {{ new Date().getFullYear() }} Business Profile Comparator. All rights reserved.
+              © {{ new Date().getFullYear() }} Competitor Insights Assistant. All rights reserved.
             </p>
           </div>
           <div class="flex space-x-6">

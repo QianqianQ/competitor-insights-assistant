@@ -22,7 +22,10 @@ class SerperBusinessDataProvider:
     def __init__(self, api_key: str, use_mock: bool = True):
         self.api_key = api_key
         self.provider_name = "serper"
-        self.base_url = "https://serper.dev/search"
+        self.base_url = "https://google.serper.dev/places"  # maps / search
+        # google_places = (
+        #     "https://places.googleapis.com/v1/places:searchText"
+        # )  # Text search
         self.use_mock = use_mock
         if use_mock:
             self._mock_data = self._load_mock_data()
@@ -184,18 +187,30 @@ class SerperBusinessDataProvider:
 
     async def _fetch_business(self, identifier: str) -> BusinessProfileData:
         """
-        Fetch from real Serper API.
-        TODO: Implement actual API integration
+        Fetch from externnal API
+        (Serper.dev / Google Places API /
+        LangChain GoogleSerperAPIWrapper for Google Places).
+        # TODO: Solution for search via website URL
         """
-        # TODO: Implement Serper API call
+        # For name
         # headers = {"X-API-KEY": self.api_key, "Content-Type": "application/json"}
-        # payload = {"q": identifier, "gl": "us", "hl": "en"}
-        # async with httpx.AsyncClient() as client:
-        #     response = await client.post(self.base_url, json=payload, headers=headers)
-        #     data = response.json()
-        #     return self.map_response_to_profile(data["places"][0])
 
-        raise NotImplementedError("Real API integration pending")
+        # payload = {
+        #     "q": identifier,
+        #     "location": "Helsinki, Finland",
+        #     "gl": "fi",
+        #     "hl": "en"
+        # }
+
+        # response = requests.post(self.base_url, headers=headers, json=payload)
+        # data = response.json()
+
+        # return self.map_response_to_profile(data["places"][0])
+
+        # For website, text-based search -> Place ID -> Place Details
+        # may be a solution
+
+        raise NotImplementedError("Real API search integration pending")
 
     async def _search_competitors(
         self, query: str, location: Optional[str], limit: int
@@ -204,13 +219,19 @@ class SerperBusinessDataProvider:
         Search using real Serper API.
         TODO: Implement actual API integration
         """
-        # TODO: Implement Serper API search
+        # Google Places API search / LangChain GoogleSerperAPIWrapper
+        # may be good option for search competitors
+
         # search_query = f"{query} {location}" if location else query
+
         # payload = {"q": search_query, "gl": "us", "hl": "en", "num": limit}
+
         # headers = {"X-API-KEY": self.api_key, "Content-Type": "application/json"}
+
         # async with httpx.AsyncClient() as client:
-        #     response = await client.post(self.base_url, json=payload, headers=headers)
+        #     response = await client.post(self.base_url,headers=headers, json=payload)
         #     data = response.json()
+
         #     return [self.map_response_to_profile(place) for place in data.get("places", [])]
 
         raise NotImplementedError("Real API search integration pending")

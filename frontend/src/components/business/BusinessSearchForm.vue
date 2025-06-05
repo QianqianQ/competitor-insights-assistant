@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useComparisonStore } from '@/stores/comparisonStore';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
@@ -11,6 +11,7 @@ const router = useRouter();
 const userBusinessIdentifier = ref('');
 const enableCompetitorsType = ref(false);
 const competitorType = ref('');
+const reportStyle = ref<'casual' | 'data-driven'>('casual');
 
 const validateForm = (): boolean => {
   if (!userBusinessIdentifier.value.trim()) {
@@ -48,7 +49,10 @@ const isValidUrl = (url: string): boolean => {
 async function submitComparisonRequest() {
   if (!validateForm()) return;
 
-  await store.fetchComparisonReport({ user_business_identifier: userBusinessIdentifier.value });
+  await store.fetchComparisonReport({
+    user_business_identifier: userBusinessIdentifier.value,
+    report_style: reportStyle.value
+  });
   if (store.report && !store.error) {
     // Navigate to comparison view to show detailed comparison first
     router.push({ name: 'comparison' });
@@ -87,7 +91,7 @@ async function submitComparisonRequest() {
       </div> -->
 
       <!-- <div v-if="searchType === 'name'" class="mb-4">
-        <label for="business-name" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+        <label for="business-name" class="block text-md font-medium text-gray-700 mb-1">Business Name</label>
         <input
           type="text"
           id="business-name"
@@ -98,7 +102,7 @@ async function submitComparisonRequest() {
       </div>
 
       <div v-if="searchType === 'website'" class="mb-4">
-        <label for="business-website" class="block text-sm font-medium text-gray-700 mb-1">Business Website</label>
+        <label for="business-website" class="block text-md font-medium text-gray-700 mb-1">Business Website</label>
         <input
           type="url"
           id="business-website"
@@ -108,7 +112,7 @@ async function submitComparisonRequest() {
         />
       </div> -->
       <div class="mb-4">
-        <label for="business-identifier" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+        <label for="business-identifier" class="block text-md font-medium text-gray-700 mb-1">Business Name</label>
         <input
           type="text"
           id="business-identifier"
@@ -122,7 +126,7 @@ async function submitComparisonRequest() {
 
     <div class="mb-6">
       <div class="flex items-center justify-between mb-4">
-        <label class="text-sm font-medium text-gray-700">Select competitor type</label>
+        <label class="text-md font-medium text-gray-700">Select competitor type</label>
         <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
           <input
             type="checkbox"
@@ -142,7 +146,7 @@ async function submitComparisonRequest() {
       </div>
 
       <div v-if="enableCompetitorsType" class="animate-fade-in">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Find competitors by:</label>
+        <label class="block text-md font-medium text-gray-700 mb-2">Find competitors by:</label>
         <div class="flex space-x-4">
           <div class="flex items-center">
             <input
@@ -164,6 +168,38 @@ async function submitComparisonRequest() {
             />
             <label for="similar-competitors" class="ml-2 text-gray-700">Similar businesses</label>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-md font-medium text-gray-700 mb-4">Report Style</label>
+      <div class="flex space-x-4">
+        <div class="flex items-center">
+          <input
+            id="casual-style"
+            type="radio"
+            v-model="reportStyle"
+            value="casual"
+            class="h-4 w-4 text-primary-600 focus:ring-primary-500"
+          />
+          <label for="casual-style" class="ml-2 text-gray-700">
+            <span class="font-medium">Casual</span>
+            <span class="text-sm text-gray-500 block">Friendly, easy-to-understand</span>
+          </label>
+        </div>
+        <div class="flex items-center">
+          <input
+            id="data-driven-style"
+            type="radio"
+            v-model="reportStyle"
+            value="data-driven"
+            class="h-4 w-4 text-primary-600 focus:ring-primary-500"
+          />
+          <label for="data-driven-style" class="ml-2 text-gray-700">
+            <span class="font-medium">Data-driven</span>
+            <span class="text-sm text-gray-500 block">Analytical, metrics-focused</span>
+          </label>
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ const toggleMobileMenu = () => {
         <div class="flex items-center">
           <div class="flex-shrink-0 flex items-center">
             <router-link to="/" class="flex items-center">
-              <span class="text-primary-700 text-xl font-bold">Business Profile Comparator</span>
+              <span class="text-primary-700 text-xl font-bold">Competitor Insights Assistant</span>
             </router-link>
           </div>
 
