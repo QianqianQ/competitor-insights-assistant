@@ -15,8 +15,8 @@
           </div>
           <div class="hidden md:block md:w-1/2">
             <img
-              src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              alt="Business growth analysis"
+              src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+              alt="Healthy food restaurant dishes"
               class="w-full h-auto rounded-2xl shadow-2xl animate-fade-in transform hover:scale-105 transition-transform duration-500"
             />
           </div>
