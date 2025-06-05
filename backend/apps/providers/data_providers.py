@@ -78,38 +78,43 @@ class SerperBusinessDataProvider:
     def fetch_business_from_mock_data(self, identifier: str) -> BusinessProfileData:
         """Fetch from mock data."""
         identifier_lower = identifier.lower().strip()
+        is_website = identifier_lower.startswith(("http://", "https://", "www."))
 
         for place in self._mock_data.get("places", []):
-            # Exact name match
-            if place.get("title", "").lower() == identifier_lower:
+
+            # Website match (if identifier is a URL)
+            if is_website and identifier_lower in place.get("website", "").lower():
                 return self.map_response_to_profile(place)
 
-            # Partial name match
-            if identifier_lower in place.get("title", "").lower():
-                return self.map_response_to_profile(place)
+            # Name match (if identifier is not a URL)
+            if not is_website:
+                # Exact name match
+                if place.get("title", "").lower() == identifier_lower:
+                    return self.map_response_to_profile(place)
 
-            # Website match
-            website = place.get("website", "")
-            if website and identifier_lower in website.lower():
-                return self.map_response_to_profile(place)
+                # Partial name match
+                if identifier_lower in place.get("title", "").lower():
+                    return self.map_response_to_profile(place)
 
         logger.warning("business_not_found", identifier=identifier)
 
         # Return fallback profile if business is not found
         return BusinessProfileData(
-            name=identifier,
-            rating_count=random.randint(10, 500),
+            name=identifier if not is_website else "Your Business",
+            rating_count=random.randint(10, 1000),
             rating=round(random.uniform(3.5, 4.8), 1),
-            image_count=random.randint(1, 20),
+            image_count=random.randint(1, 100),
             has_hours=random.choice([True, False]),
             has_description=random.choice([True, False]),
             has_menu_link=random.choice([True, False]),
             has_price_level=random.choice([True, False]),
-            category="",
-            website="",
-            address="",
-            latitude=0.0,
-            longitude=0.0,
+            category=random.choice(["Restaurant", "Bar", "Cafe"]),
+            website=identifier if is_website
+            else f"https://{identifier.lower().strip()}.com",
+            address="Finland" if is_website
+            else f"{identifier.lower().strip()}, Finland",
+            latitude=random.uniform(59.9, 60.1),
+            longitude=random.uniform(24.9, 25.1),
         )
 
     def search_competitors_from_mock_data(

@@ -55,7 +55,7 @@ class ComparisonService:
         self,
         user_business_identifier: str,
         report_style: str = "casual",
-        max_competitors: int = 10,
+        max_competitors: int = 50,
         **kwargs
     ) -> ComparisonReport:
         """
@@ -87,7 +87,7 @@ class ComparisonService:
         try:
             # Fetch and store user business profile
             user_business = self._fetch_business(
-                user_business_identifier, is_user_business=True
+                user_business_identifier
             )
 
             # Automatically find competitors based on user business
@@ -152,7 +152,7 @@ class ComparisonService:
             raise ValidationError("User business identifier is required")
 
     def _fetch_business(
-        self, identifier: str, is_user_business: bool = False
+        self, identifier: str
     ) -> BusinessProfileData:
         """
         Fetch business data and store/update in database.
