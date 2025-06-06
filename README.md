@@ -26,6 +26,11 @@ User's business data is mock data generated randomly.
 ### Option 1: Docker Compose
 
 ```bash
+cd backend
+
+cp .env.example .env
+# replace the Perplexity API key with your own
+
 docker-compose up --build
 ```
 
@@ -41,6 +46,9 @@ cd backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+cp .env.example .env
+# replace the Perplexity API key with your own
 
 python manage.py migrate
 python manage.py runserver

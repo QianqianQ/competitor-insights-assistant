@@ -8,7 +8,7 @@ This Django backend implements a **Service Layer + Provider Pattern** architectu
 
 ### 🏗️ Service Layer Pattern
 - **Clean separation** between API, business logic, and data access
-- **Provider abstractions** for easy switching between data sources and LLM services
+- **(TODO) Provider abstractions** for easy switching between data sources and LLM services
 - **Structured logging** with observability from day one
 - **Type-safe** implementation with comprehensive error handling
 
@@ -32,43 +32,16 @@ apps/
 
 ### 🔌 Provider Pattern Implementation
 - **Data Providers**:
-  - `MockBusinessDataProvider` (ready)
-  - `SerperBusinessDataProvider` (placeholder for real API)
+  - `SerperBusinessDataProvider`
 - **LLM Providers**:
   - `OpenAIProvider` (mock implementation, ready for real API)
-  - `OllamaProvider` (placeholder for local models)
+  -  ` (TODO) OllamaProvider` (placeholder for local models)
 
 ### 🚀 API Endpoints
 
 #### Comparison Operations
 ```
 POST   /api/v1/comparisons/              # Create comparison
-GET    /api/v1/comparisons/list/         # List comparisons
-GET    /api/v1/comparisons/{report_id}/  # Get specific comparison
-```
-
-#### Business Search
-```
-GET    /api/v1/comparisons/businesses/search/  # Search businesses
-```
-
-## Quick Start
-
-### 1. Install Dependencies
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-### 2. Run Migrations
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### 3. Start Development Server
-```bash
-python manage.py runserver
 ```
 
 ### 4. Test the API
@@ -78,23 +51,17 @@ curl -X POST http://localhost:8000/api/v1/comparisons/ \
   -H "Content-Type: application/json" \
   -d '{
     "user_business_identifier": "Mario'\''s Restaurant",
-    "competitor_identifiers": ["Luigi'\''s Pizza", "Tony'\''s Kitchen"]
+    "report_style": "casual"
   }'
-
-# Search for businesses
-curl "http://localhost:8000/api/v1/comparisons/businesses/search/?query=restaurant&limit=5"
 ```
 
 ## Configuration
 
-### Environment Variables
+### (TO UPDATE) Environment Variables
 ```bash
 # Django settings
 DEBUG=True
 SECRET_KEY=your-secret-key
-
-# Database (optional - defaults to SQLite)
-DATABASE_URL=postgresql://user:pass@localhost/dbname
 
 # External API Keys (when ready)
 OPENAI_API_KEY=your-openai-key
@@ -130,7 +97,7 @@ coverage report
 
 ## Data Models
 
-### BusinessProfile
+### BusinessProfile (Not In Use)
 - Core business information (name, address, website)
 - Data source tracking
 - User business identification
@@ -143,7 +110,9 @@ coverage report
 - Metadata (tokens used, provider, model)
 - Relationship tracking between user and competitors
 
-## Provider Pattern Details
+**Note:** BusinessProfileData with `dataclass` decorator is used for simplicity in this stage.
+
+## (TODO)Provider Pattern Details
 
 ### Data Provider Interface
 ```python
@@ -170,38 +139,17 @@ class LLMProvider(ABC):
            # Implement real API calls
    ```
 
-2. **Implement OpenAI integration**
-   ```python
-   # In apps/providers/llm_providers.py
-   class OpenAIProvider:
-       async def generate_comparison_analysis(self, user_data, competitor_data):
-           # Implement real OpenAI API calls
-   ```
-
 ### Phase 3: Enhanced Features
 - **Caching layer** for expensive API calls
 - **Rate limiting** for external APIs
-- **Webhook support** for real-time updates
-- **Advanced filtering** and search capabilities
-- **Bulk comparison** operations
 
 ### Phase 4: Production Readiness
 - **PostgreSQL** database configuration
 - **Redis** for caching and sessions
 - **Celery** for background tasks
-- **Docker** containerization
 - **Monitoring** and alerting
 
-## Development Guidelines
-
-### Code Style
-- **Type hints** everywhere
-- **Docstrings** for all public methods
-- **Structured logging** for observability
-- **Error handling** with custom exceptions
-- **Testing** with comprehensive coverage
-
-### Adding New Providers
+### (TODO) Adding New Providers
 
 1. **Create provider class**:
    ```python
@@ -225,43 +173,3 @@ class LLMProvider(ABC):
        def test_provider_functionality(self):
            # Test implementation
    ```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Import errors**: Ensure all apps are in `INSTALLED_APPS`
-2. **Migration issues**: Run `makemigrations` for each app
-3. **Async errors**: Check event loop handling in views
-4. **Provider errors**: Verify mock data is working before real APIs
-
-### Logging
-All operations are logged with structured data:
-```json
-{
-  "event": "comparison_started",
-  "user_business": "Mario's Restaurant",
-  "competitor_count": 2,
-  "timestamp": "2024-01-15T10:30:00Z"
-}
-```
-
-## Contributing
-
-1. Follow the established patterns
-2. Add tests for new functionality
-3. Update documentation
-4. Use type hints and docstrings
-5. Follow the service layer architecture
-
----
-
-**Ready for frontend integration!** 🚀
-
-The backend provides a complete, production-ready foundation with:
-- ✅ Working API endpoints
-- ✅ Mock data for development
-- ✅ Extensible provider pattern
-- ✅ Comprehensive testing
-- ✅ Structured logging
-- ✅ Type safety
